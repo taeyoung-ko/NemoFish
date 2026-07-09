@@ -189,24 +189,6 @@
               </div>
             </div>
 
-            <!-- 에이전트(퍼소나) 수 -->
-            <div class="console-section">
-              <div class="console-header">
-                <span class="console-label">{{ $t('home.agentCount') }}</span>
-              </div>
-              <div class="input-wrapper">
-                <input
-                  v-model.number="formData.agentCount"
-                  type="number"
-                  min="1"
-                  max="1000"
-                  class="code-input"
-                  :placeholder="$t('home.agentCountPlaceholder')"
-                  :disabled="loading"
-                />
-              </div>
-            </div>
-
             <!-- 启动按钮 -->
             <div class="console-section btn-section">
               <button 
@@ -240,8 +222,7 @@ const router = useRouter()
 
 // 表单数据
 const formData = ref({
-  simulationRequirement: '',
-  agentCount: Number(localStorage.getItem('nemotronAgentCount')) || 20
+  simulationRequirement: ''
 })
 
 // 文件列表
@@ -337,10 +318,6 @@ const scrollToBottom = () => {
 // 开始模拟 - 立即跳转，API调用在Process页面进行
 const startSimulation = () => {
   if (!canSubmit.value || loading.value) return
-
-  // 에이전트 수를 localStorage에 저장 → Step2의 prepare 요청에서 사용
-  const cnt = Math.max(1, Math.min(1000, Number(formData.value.agentCount) || 20))
-  localStorage.setItem('nemotronAgentCount', String(cnt))
 
   // 存储待上传的数据
   import('../store/pendingUpload.js').then(({ setPendingUpload }) => {

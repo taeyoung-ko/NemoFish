@@ -112,9 +112,9 @@
     "asyncTaskDone": "비동기 작업 완료",
     "generateAgentPersona": "에이전트 페르소나 생성",
     "generateAgentPersonaDesc": "맥락을 결합해 지식그래프에서 엔티티와 관계를 자동 추출하고, 시뮬레이션 개인을 초기화하며 현실의 씨앗을 바탕으로 고유한 행동과 기억을 부여합니다",
-    "currentAgentCount": "현재 에이전트 수",
+    "currentAgentCount": "에이전트 수",
     "expectedAgentTotal": "예상 총 에이전트 수",
-    "relatedTopicsCount": "현실 씨앗 관련 주제",
+    "relatedTopicsCount": "관심사 종류",
     "generatedAgentPersonas": "생성된 에이전트 페르소나",
     "unknownProfession": "직업 미상",
     "noBio": "소개 없음",
@@ -191,7 +191,10 @@
     "profileModalMilitary": "병역",
     "profileModalFamily": "가구형태",
     "profileModalHousing": "주거형태",
-    "profileModalSkills": "전문 스킬"
+    "profileModalSkills": "전문 스킬",
+    "agentCountLabel": "에이전트 수",
+    "agentCountRecommended": "추천: {n}",
+    "startGenerate": "페르소나 생성 시작"
   },
   "step3": {
     "startGenerateReport": "리포트 생성",

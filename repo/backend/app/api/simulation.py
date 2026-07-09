@@ -488,7 +488,18 @@ def prepare_simulation():
         except Exception as e:
             logger.warning(f"同步获取实体数量失败（将在后台任务中重试）: {e}")
             # 失败不影响后续流程，后台任务会重新获取
-        
+
+        # count_only 모드: 실제 생성 없이 엔티티 수만 반환 (GUI에서 에이전트 수 기본값으로 사용)
+        if data.get('count_only'):
+            return jsonify({
+                "success": True,
+                "data": {
+                    "count_only": True,
+                    "expected_entities_count": state.entities_count,
+                    "entity_types": state.entity_types,
+                }
+            })
+
         # 创建异步任务
         task_manager = TaskManager()
         task_id = task_manager.create_task(

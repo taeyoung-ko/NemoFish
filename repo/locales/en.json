@@ -191,7 +191,10 @@
     "profileModalMilitary": "Military",
     "profileModalFamily": "Household",
     "profileModalHousing": "Housing",
-    "profileModalSkills": "Skills"
+    "profileModalSkills": "Skills",
+    "agentCountLabel": "Number of Agents",
+    "agentCountRecommended": "Recommended: {n}",
+    "startGenerate": "Generate Personas"
   },
   "step3": {
     "startGenerateReport": "Generate Report",

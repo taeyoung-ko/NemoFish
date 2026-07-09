@@ -420,13 +420,28 @@ class SimulationManager:
                     total=3
                 )
             
+            # Nemotron 모드면 config도 실제 생성된 에이전트(프로필) 기준으로 생성.
+            # (그래프 엔티티 수가 아니라 실제 에이전트 수 → 배치·행동설정이 실제 에이전트와 정합)
+            if use_nemotron:
+                from types import SimpleNamespace
+                config_entities = [
+                    SimpleNamespace(
+                        name=p.name,
+                        summary=(p.bio or (p.persona or "")[:200]),
+                        get_entity_type=lambda: "Person",
+                    )
+                    for p in profiles
+                ]
+            else:
+                config_entities = filtered.entities
+
             sim_params = config_generator.generate_config(
                 simulation_id=simulation_id,
                 project_id=state.project_id,
                 graph_id=state.graph_id,
                 simulation_requirement=simulation_requirement,
                 document_text=document_text,
-                entities=filtered.entities,
+                entities=config_entities,
                 enable_twitter=state.enable_twitter,
                 enable_reddit=state.enable_reddit
             )

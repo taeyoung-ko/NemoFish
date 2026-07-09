@@ -191,7 +191,10 @@
     "profileModalMilitary": "兵役",
     "profileModalFamily": "家庭类型",
     "profileModalHousing": "住房类型",
-    "profileModalSkills": "专业技能"
+    "profileModalSkills": "专业技能",
+    "agentCountLabel": "Agent 数量",
+    "agentCountRecommended": "推荐: {n}",
+    "startGenerate": "生成人设"
   },
   "step3": {
     "startGenerateReport": "开始生成结果报告",

@@ -61,15 +61,23 @@
             {{ $t('step2.generateAgentPersonaDesc') }}
           </p>
 
+          <!-- 에이전트 수 설정 (그래프 생성 후, 추천값 자동 · 수정 가능) -->
+          <div v-if="phase === 0" class="agent-count-setup">
+            <div class="count-row">
+              <label class="count-label">{{ $t('step2.agentCountLabel') }}</label>
+              <input class="count-input" type="number" min="1" max="1000" v-model.number="nemotronCount" />
+              <span class="count-hint" v-if="autoCount">{{ $t('step2.agentCountRecommended', { n: autoCount }) }}</span>
+            </div>
+            <button class="generate-btn" @click="beginGeneration" :disabled="!nemotronCount || nemotronCount < 1">
+              {{ $t('step2.startGenerate') }}
+            </button>
+          </div>
+
           <!-- Profiles Stats -->
           <div v-if="profiles.length > 0" class="stats-grid">
             <div class="stat-card">
               <span class="stat-value">{{ profiles.length }}</span>
               <span class="stat-label">{{ $t('step2.currentAgentCount') }}</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value">{{ expectedTotal || '-' }}</span>
-              <span class="stat-label">{{ $t('step2.expectedAgentTotal') }}</span>
             </div>
             <div class="stat-card">
               <span class="stat-value">{{ totalTopicsCount }}</span>
@@ -669,6 +677,8 @@ const progressMessage = ref('')
 const profiles = ref([])
 const entityTypes = ref([])
 const expectedTotal = ref(null)
+const nemotronCount = ref(20)      // 생성할 에이전트 수 (입력값)
+const autoCount = ref(null)        // 그래프 엔티티 수 = 추천/기본값
 const simulationConfig = ref(null)
 const selectedProfile = ref(null)
 const showProfilesDetail = ref(true)
@@ -775,7 +785,26 @@ const selectProfile = (profile) => {
   selectedProfile.value = profile
 }
 
-// 自动开始准备模拟
+// 엔티티 수 조회 → 추천/기본값 세팅 (생성은 버튼 클릭 시)
+const fetchEntityCount = async () => {
+  try {
+    const res = await prepareSimulation({ simulation_id: props.simulationId, count_only: true })
+    if (res.success && res.data?.count_only) {
+      autoCount.value = res.data.expected_entities_count || null
+      if (autoCount.value) nemotronCount.value = autoCount.value  // 첫 표시값 = 자동값
+    }
+  } catch (e) {
+    // 무시: 조회 실패해도 기본값(20)으로 진행 가능
+  }
+}
+
+// "페르소나 생성 시작" 버튼
+const beginGeneration = () => {
+  if (phase.value !== 0) return
+  startPrepareSimulation()
+}
+
+// 준비(페르소나+설정 생성) 시작
 const startPrepareSimulation = async () => {
   if (!props.simulationId) {
     addLog(t('log.errorMissingSimId'))
@@ -794,8 +823,8 @@ const startPrepareSimulation = async () => {
       simulation_id: props.simulationId,
       use_llm_for_profiles: true,
       parallel_profile_count: 5,
-      // 홈에서 설정한 에이전트(퍼소나) 수 → Nemotron 샘플링 수
-      nemotron_agent_count: Number(localStorage.getItem('nemotronAgentCount')) || 20
+      // 입력한 에이전트 수 → Nemotron 샘플링 수
+      nemotron_agent_count: nemotronCount.value
     })
     
     if (res.success && res.data) {
@@ -1078,10 +1107,10 @@ watch(() => props.systemLogs?.length, () => {
 })
 
 onMounted(() => {
-  // 自动开始准备流程
+  // 그래프 엔티티 수를 가져와 추천값 세팅. 실제 생성은 사용자가 버튼 클릭 시.
   if (props.simulationId) {
     addLog(t('log.step2Init'))
-    startPrepareSimulation()
+    fetchEntityCount()
   }
 })
 
@@ -1996,6 +2025,61 @@ onUnmounted(() => {
 .topic-item.skill-item {
   color: #2E7D32;
   background: #E8F5E9;
+}
+
+.agent-count-setup {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: #F5F7FA;
+  border: 1px solid #E0E4E8;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.agent-count-setup .count-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.agent-count-setup .count-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #37474F;
+}
+.agent-count-setup .count-input {
+  width: 100px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #B0BEC5;
+  border-radius: 6px;
+  outline: none;
+}
+.agent-count-setup .count-input:focus {
+  border-color: #1565C0;
+}
+.agent-count-setup .count-hint {
+  font-size: 12px;
+  color: #78909C;
+}
+.agent-count-setup .generate-btn {
+  align-self: flex-start;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: #1565C0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.agent-count-setup .generate-btn:hover {
+  background: #0D47A1;
+}
+.agent-count-setup .generate-btn:disabled {
+  background: #B0BEC5;
+  cursor: not-allowed;
 }
 
 .topic-item:hover {
