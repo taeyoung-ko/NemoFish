@@ -78,7 +78,13 @@
     "layoutGraph": "그래프",
     "layoutSplit": "분할",
     "layoutWorkbench": "작업대",
-    "stepNames": ["그래프 구축", "환경 설정", "시뮬레이션 실행", "리포트 생성", "심층 상호작용"]
+    "stepNames": [
+      "그래프 구축",
+      "환경 설정",
+      "시뮬레이션 실행",
+      "리포트 생성",
+      "심층 상호작용"
+    ]
   },
   "step1": {
     "ontologyGeneration": "온톨로지 생성",
@@ -157,12 +163,12 @@
     "customTip": "처음 실행 시에는 '직접 설정 모드'로 전환해 라운드를 줄여 빠르게 미리보고 오류 위험을 낮추는 것을 강력히 권장합니다",
     "backToGraphBuild": "그래프 구축으로 돌아가기",
     "startDualWorldSim": "이중 월드 병렬 시뮬레이션 시작",
-    "profileModalAge": "추정 나이",
-    "profileModalGender": "추정 성별",
-    "profileModalCountry": "국가/지역",
+    "profileModalAge": "나이",
+    "profileModalGender": "성별",
+    "profileModalCountry": "국가",
     "profileModalMbti": "추정 MBTI",
-    "profileModalBio": "페르소나 소개",
-    "profileModalTopics": "현실 씨앗 관련 주제",
+    "profileModalBio": "한 줄 소개",
+    "profileModalTopics": "관심사",
     "profileModalPersona": "상세 페르소나 배경",
     "personaDimExperience": "전체 이벤트 경험",
     "personaDimExperienceDesc": "이 이벤트에서의 완전한 행동 궤적",
@@ -177,7 +183,15 @@
     "genderOther": "기타",
     "yearsOld": "세",
     "initializing": "초기화 중",
-    "generating": "생성 중"
+    "generating": "생성 중",
+    "profileModalProfession": "직업",
+    "profileModalRegion": "거주지",
+    "profileModalEducation": "학력",
+    "profileModalMarital": "혼인상태",
+    "profileModalMilitary": "병역",
+    "profileModalFamily": "가구형태",
+    "profileModalHousing": "주거형태",
+    "profileModalSkills": "전문 스킬"
   },
   "step3": {
     "startGenerateReport": "리포트 생성",

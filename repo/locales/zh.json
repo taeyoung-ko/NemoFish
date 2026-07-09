@@ -183,7 +183,15 @@
     "genderOther": "其他",
     "yearsOld": "岁",
     "initializing": "初始化",
-    "generating": "生成中"
+    "generating": "生成中",
+    "profileModalProfession": "职业",
+    "profileModalRegion": "居住地",
+    "profileModalEducation": "学历",
+    "profileModalMarital": "婚姻状况",
+    "profileModalMilitary": "兵役",
+    "profileModalFamily": "家庭类型",
+    "profileModalHousing": "住房类型",
+    "profileModalSkills": "专业技能"
   },
   "step3": {
     "startGenerateReport": "开始生成结果报告",

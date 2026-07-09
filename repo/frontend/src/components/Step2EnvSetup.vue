@@ -535,8 +535,8 @@
           <div class="modal-header">
           <div class="modal-header-info">
             <div class="modal-name-row">
-              <span class="modal-realname">{{ selectedProfile.username }}</span>
-              <span class="modal-username">@{{ selectedProfile.name }}</span>
+              <span class="modal-realname">{{ selectedProfile.name }}</span>
+              <span class="modal-username">@{{ selectedProfile.username }}</span>
             </div>
             <span class="modal-profession">{{ selectedProfile.profession }}</span>
           </div>
@@ -544,7 +544,7 @@
         </div>
         
         <div class="modal-body">
-          <!-- 基本信息 -->
+          <!-- 기본 정보 (Nemotron 컬럼별) -->
           <div class="modal-info-grid">
             <div class="info-item">
               <span class="info-label">{{ $t('step2.profileModalAge') }}</span>
@@ -554,58 +554,65 @@
               <span class="info-label">{{ $t('step2.profileModalGender') }}</span>
               <span class="info-value">{{ { male: $t('step2.genderMale'), female: $t('step2.genderFemale'), other: $t('step2.genderOther') }[selectedProfile.gender] || selectedProfile.gender }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ $t('step2.profileModalCountry') }}</span>
-              <span class="info-value">{{ selectedProfile.country || '-' }}</span>
+            <div class="info-item" v-if="selectedProfile.profession">
+              <span class="info-label">{{ $t('step2.profileModalProfession') }}</span>
+              <span class="info-value">{{ selectedProfile.profession }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ $t('step2.profileModalMbti') }}</span>
-              <span class="info-value mbti">{{ selectedProfile.mbti || '-' }}</span>
+            <div class="info-item" v-if="selectedProfile.district || selectedProfile.province">
+              <span class="info-label">{{ $t('step2.profileModalRegion') }}</span>
+              <span class="info-value">{{ selectedProfile.district || selectedProfile.province }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.education_level">
+              <span class="info-label">{{ $t('step2.profileModalEducation') }}</span>
+              <span class="info-value">{{ selectedProfile.education_level }}{{ selectedProfile.bachelors_field && selectedProfile.bachelors_field !== '해당없음' ? ' · ' + selectedProfile.bachelors_field : '' }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.marital_status">
+              <span class="info-label">{{ $t('step2.profileModalMarital') }}</span>
+              <span class="info-value">{{ selectedProfile.marital_status }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.family_type">
+              <span class="info-label">{{ $t('step2.profileModalFamily') }}</span>
+              <span class="info-value">{{ selectedProfile.family_type }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.housing_type">
+              <span class="info-label">{{ $t('step2.profileModalHousing') }}</span>
+              <span class="info-value">{{ selectedProfile.housing_type }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.military_status && selectedProfile.military_status !== '해당없음'">
+              <span class="info-label">{{ $t('step2.profileModalMilitary') }}</span>
+              <span class="info-value">{{ selectedProfile.military_status }}</span>
+            </div>
+            <div class="info-item" v-if="selectedProfile.country">
+              <span class="info-label">{{ $t('step2.profileModalCountry') }}</span>
+              <span class="info-value">{{ selectedProfile.country }}</span>
             </div>
           </div>
 
-          <!-- 简介 -->
+          <!-- 한 줄 소개 -->
           <div class="modal-section">
             <span class="section-label">{{ $t('step2.profileModalBio') }}</span>
             <p class="section-bio">{{ selectedProfile.bio || $t('step2.noBio') }}</p>
           </div>
 
-          <!-- 关注话题 -->
-          <div class="modal-section" v-if="selectedProfile.interested_topics?.length">
-            <span class="section-label">{{ $t('step2.profileModalTopics') }}</span>
+          <!-- 전문 스킬 -->
+          <div class="modal-section" v-if="selectedProfile.skills?.length">
+            <span class="section-label">{{ $t('step2.profileModalSkills') }}</span>
             <div class="topics-grid">
-              <span 
-                v-for="topic in selectedProfile.interested_topics" 
-                :key="topic" 
-                class="topic-item"
-              >{{ topic }}</span>
+              <span v-for="s in selectedProfile.skills" :key="s" class="topic-item skill-item">{{ s }}</span>
             </div>
           </div>
 
-          <!-- 详细人设 -->
+          <!-- 관심사 -->
+          <div class="modal-section" v-if="selectedProfile.interested_topics?.length">
+            <span class="section-label">{{ $t('step2.profileModalTopics') }}</span>
+            <div class="topics-grid">
+              <span v-for="topic in selectedProfile.interested_topics" :key="topic" class="topic-item">{{ topic }}</span>
+            </div>
+          </div>
+
+          <!-- 상세 페르소나 -->
           <div class="modal-section" v-if="selectedProfile.persona">
             <span class="section-label">{{ $t('step2.profileModalPersona') }}</span>
-            
-            <!-- 人设维度概览 -->
-            <div class="persona-dimensions">
-              <div class="dimension-card">
-                <span class="dim-title">{{ $t('step2.personaDimExperience') }}</span>
-                <span class="dim-desc">{{ $t('step2.personaDimExperienceDesc') }}</span>
-              </div>
-              <div class="dimension-card">
-                <span class="dim-title">{{ $t('step2.personaDimBehavior') }}</span>
-                <span class="dim-desc">{{ $t('step2.personaDimBehaviorDesc') }}</span>
-              </div>
-              <div class="dimension-card">
-                <span class="dim-title">{{ $t('step2.personaDimMemory') }}</span>
-                <span class="dim-desc">{{ $t('step2.personaDimMemoryDesc') }}</span>
-              </div>
-              <div class="dimension-card">
-                <span class="dim-title">{{ $t('step2.personaDimSocial') }}</span>
-                <span class="dim-desc">{{ $t('step2.personaDimSocialDesc') }}</span>
-              </div>
-            </div>
-
             <div class="persona-content">
               <p class="section-persona">{{ selectedProfile.persona }}</p>
             </div>
@@ -1984,6 +1991,11 @@ onUnmounted(() => {
   border-radius: 12px;
   transition: all 0.2s;
   border: none;
+}
+
+.topic-item.skill-item {
+  color: #2E7D32;
+  background: #E8F5E9;
 }
 
 .topic-item:hover {

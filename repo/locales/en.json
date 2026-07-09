@@ -183,7 +183,15 @@
     "genderOther": "Other",
     "yearsOld": "years old",
     "initializing": "Initializing",
-    "generating": "Generating"
+    "generating": "Generating",
+    "profileModalProfession": "Occupation",
+    "profileModalRegion": "Region",
+    "profileModalEducation": "Education",
+    "profileModalMarital": "Marital Status",
+    "profileModalMilitary": "Military",
+    "profileModalFamily": "Household",
+    "profileModalHousing": "Housing",
+    "profileModalSkills": "Skills"
   },
   "step3": {
     "startGenerateReport": "Generate Report",
