@@ -1,0 +1,56 @@
+# ===== 로그 / 임시 / PID =====
+*.log
+*.pid
+repro_pipeline.py
+
+# ===== 환경변수 (민감정보) =====
+.env
+.env.local
+.env.*.local
+repo/.env
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ===== Node =====
+node_modules/
+npm-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# ===== 생성물 / 데이터 (커밋 X) =====
+repo/backend/uploads/
+repo/backend/app/uploads/
+repo/backend/logs/
+*.db
+*.sqlite
+reddit_profiles.json
+twitter_profiles.csv
+
+# ===== HF / 모델 캐시 =====
+hf_cache/
+*.safetensors
+
+# ===== 테스트 입력 문서 (개별 데이터) =====
+korea_wicked_problem_area_reports.md
+
+# ===== IDE / 세션 =====
+.vscode/
+.idea/
+.cursor/
+.claude/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
