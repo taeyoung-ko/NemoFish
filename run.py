@@ -113,6 +113,25 @@ def main():
         except Exception as e:
             print(f"[경고] OASIS 패치 실행 실패(수동으로 python scripts/patch_oasis.py): {e}", flush=True)
 
+    # Nemotron 로컬 풀이 없으면 백그라운드로 생성(다운로드+전처리). 있으면 스킵.
+    # 생성 중/전엔 시뮬레이션이 스트리밍으로 자동 폴백하므로 기동을 막지 않음.
+    _pool = os.environ.get("NEMOTRON_POOL_PATH") or os.path.join(
+        BACKEND, "app", "data", "nemotron_profiles.jsonl")
+    _prep = os.path.join(HERE, "scripts", "prepare_nemotron.py")
+    if os.path.exists(_prep) and not os.path.exists(_pool):
+        print("· Nemotron 로컬 풀 없음 → 백그라운드로 생성 시작 "
+              "(완료 전 첫 시뮬은 스트리밍 폴백)", flush=True)
+        try:
+            subprocess.Popen(
+                [NEMOFISH_PY, _prep],
+                cwd=HERE,
+                env={**os.environ, "HF_HUB_ENABLE_HF_TRANSFER": "1"},
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+        except Exception as e:
+            print(f"[경고] 풀 생성 실행 실패(수동: python scripts/prepare_nemotron.py): {e}", flush=True)
+
     # 1) Qwen 서버
     if NO_QWEN:
         print("· Qwen 서버: --no-qwen 지정 → 건너뜀", flush=True)

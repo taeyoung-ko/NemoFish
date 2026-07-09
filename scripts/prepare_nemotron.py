@@ -42,15 +42,18 @@ def main():
     print(f"[prepare_nemotron] 다운로드+전처리 시작: {args.size}명 → {args.out}")
     print("  (스트리밍으로 받아 변환합니다. 수 분 소요될 수 있음)")
 
+    # 원자적 쓰기: .tmp에 쓰고 완료 후 교체 → 도중에 죽어도 부분파일이 최종경로에 안 남음
+    tmp = args.out + ".tmp"
     n = 0
     buf = min(args.size, 20000)
-    with open(args.out, "w", encoding="utf-8") as f:
+    with open(tmp, "w", encoding="utf-8") as f:
         for row in sample_rows(args.size, seed=args.seed, streaming=True, shuffle_buffer=buf):
             d = row_to_profile_dict(row)
             f.write(json.dumps(d, ensure_ascii=False) + "\n")
             n += 1
             if n % 2000 == 0:
                 print(f"  {n}/{args.size} ...", flush=True)
+    os.replace(tmp, args.out)
 
     size_mb = os.path.getsize(args.out) / 1e6
     print(f"[prepare_nemotron] 완료: {n}명 저장 ({size_mb:.1f} MB) → {args.out}")
