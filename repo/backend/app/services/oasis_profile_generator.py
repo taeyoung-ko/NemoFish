@@ -1075,11 +1075,11 @@ class OasisProfileGenerator:
         LLM 기반 generate_profiles_from_entities의 대체 경로. 씨앗 자료와 무관하게
         통계 기반 한국인 인구 표본으로 에이전트 군중을 구성한다. LLM 호출 없음(빠름).
         """
-        from .nemotron_loader import row_to_profile_dict, sample_rows
+        from .nemotron_loader import sample_profiles
 
         profiles: List[OasisAgentProfile] = []
-        for idx, row in enumerate(sample_rows(count, seed=seed, streaming=streaming)):
-            d = row_to_profile_dict(row)
+        # 로컬 사전전처리 풀 우선(다운로드/네트워크 없이 즉시), 없으면 스트리밍 폴백
+        for idx, d in enumerate(sample_profiles(count, seed=seed)):
             name = d["name"]
             profile = OasisAgentProfile(
                 user_id=idx,

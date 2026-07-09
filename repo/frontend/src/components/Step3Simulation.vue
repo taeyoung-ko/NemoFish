@@ -140,7 +140,7 @@
             
             <div class="timeline-card">
               <div class="card-header">
-                <div class="agent-info">
+                <div class="agent-info clickable" @click="showAgentProfile(action.agent_id)" :title="$t('step2.profileModalPersona')">
                   <div class="avatar-placeholder">{{ (action.agent_name || 'A')[0] }}</div>
                   <span class="agent-name">{{ action.agent_name }}</span>
                 </div>
@@ -282,6 +282,9 @@
         </div>
       </div>
     </div>
+
+    <!-- 이름 클릭 시 프로필 카드 -->
+    <AgentProfileModal :profile="selectedProfile" @close="selectedProfile = null" />
   </div>
 </template>
 
@@ -293,11 +296,36 @@ import {
   startSimulation,
   stopSimulation,
   getRunStatus,
-  getRunStatusDetail
+  getRunStatusDetail,
+  getSimulationProfiles
 } from '../api/simulation'
 import { generateReport } from '../api/report'
+import AgentProfileModal from './AgentProfileModal.vue'
 
 const { t } = useI18n()
+
+// 에이전트 프로필 (이름 클릭 시 카드 표시용)
+const agentProfiles = ref([])
+const selectedProfile = ref(null)
+const profileById = computed(() => {
+  const m = {}
+  for (const p of agentProfiles.value) {
+    if (p.user_id !== undefined && p.user_id !== null) m[p.user_id] = p
+  }
+  return m
+})
+const loadAgentProfiles = async () => {
+  if (!props.simulationId) return
+  try {
+    const res = await getSimulationProfiles(props.simulationId, 'reddit')
+    const data = res?.data?.profiles || res?.profiles || res?.data || []
+    if (Array.isArray(data)) agentProfiles.value = data
+  } catch (e) { /* 프로필 없으면 클릭 무시 */ }
+}
+const showAgentProfile = (agentId) => {
+  const p = profileById.value[agentId]
+  if (p) selectedProfile.value = p
+}
 
 const props = defineProps({
   simulationId: String,
@@ -690,6 +718,7 @@ watch(() => props.systemLogs?.length, () => {
 onMounted(() => {
   addLog(t('log.step3Init'))
   if (props.simulationId) {
+    loadAgentProfiles()   // 이름 클릭 시 카드 표시용 프로필 로드
     doStartSimulation()
   }
 })
@@ -1061,6 +1090,9 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
 }
+.agent-info.clickable { cursor: pointer; border-radius: 6px; padding: 2px 4px; margin: -2px -4px; transition: background 0.15s; }
+.agent-info.clickable:hover { background: rgba(21, 101, 192, 0.08); }
+.agent-info.clickable:hover .agent-name { text-decoration: underline; color: #1565C0; }
 
 .avatar-placeholder {
   width: 24px;
