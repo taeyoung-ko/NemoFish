@@ -23,7 +23,8 @@
     "minutes": "분",
     "rounds": "라운드",
     "items": "개",
-    "files": "개 파일"
+    "files": "개 파일",
+    "title": "NemoFish - 로컬 여론·시나리오 시뮬레이션"
   },
   "meta": {
     "title": "NemoFish - 모든 것을 예측하다",
@@ -33,22 +34,14 @@
     "visitGithub": "GitHub 페이지 방문"
   },
   "home": {
-    "tagline": "간결하고 범용적인 집단지성 엔진",
     "version": "/ v0.1-Preview",
     "heroTitle1": "자료를 업로드하면,",
     "heroTitle2": "미래를 예측합니다",
-    "heroDesc": "문서 하나에서 {brand}가 현실의 씨앗을 추출해 최대 {agentScale} 규모의 평행세계를 자동 생성합니다. 신의 시점에서 변수를 주입해 복잡한 집단 동역학 속 {optimalSolution}을 찾아냅니다.",
+    "heroDesc": "문서와 시뮬레이션 프롬프트를 입력하면, {brand}가 지식그래프를 구축하고 Nemotron-Personas-Korea 기반 한국인 에이전트로 반응을 시뮬레이션해 결과를 예측합니다.",
     "heroDescBrand": "NemoFish",
-    "heroDescAgentScale": "수백만 명 규모의 에이전트",
-    "heroDescOptimalSolution": "\"국소 최적해\"",
-    "slogan": "에이전트가 미래를 리허설하고, 결정이 승리하게 하라",
     "systemStatus": "시스템 상태",
     "systemReady": "준비됨",
     "systemReadyDesc": "예측 엔진 대기 중. 비정형 데이터를 업로드해 시뮬레이션 시퀀스를 시작하세요.",
-    "metricLowCost": "저비용",
-    "metricLowCostDesc": "시뮬레이션당 평균 $5",
-    "metricHighAvail": "확장성",
-    "metricHighAvailDesc": "수백만 에이전트",
     "workflowSequence": "워크플로우",
     "step01Title": "그래프 구축",
     "step01Desc": "씨앗 추출 · 메모리 주입 · GraphRAG 구축",

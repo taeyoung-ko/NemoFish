@@ -23,7 +23,8 @@
     "minutes": "minutes",
     "rounds": "rounds",
     "items": "items",
-    "files": "files"
+    "files": "files",
+    "title": "NemoFish - Local Opinion & Scenario Simulation"
   },
   "meta": {
     "title": "NemoFish - Predict Everything",
@@ -33,22 +34,14 @@
     "visitGithub": "Visit our Github page"
   },
   "home": {
-    "tagline": "Concise & Universal Swarm Intelligence Engine",
     "version": "/ v0.1-Preview",
     "heroTitle1": "Upload Reports,",
     "heroTitle2": "Predict the Future",
-    "heroDesc": "From a single document, {brand} extracts reality seeds to auto-generate a parallel world with up to {agentScale}. Inject variables from a god's-eye view to find the {optimalSolution} in complex group dynamics.",
+    "heroDesc": "Upload a document and a simulation prompt, and {brand} builds a knowledge graph and simulates reactions with Korean agents grounded in Nemotron-Personas-Korea.",
     "heroDescBrand": "NemoFish",
-    "heroDescAgentScale": "million-scale Agents",
-    "heroDescOptimalSolution": "\"local optimum\"",
-    "slogan": "Let Agents rehearse the future, let decisions prevail",
     "systemStatus": "System Status",
     "systemReady": "Ready",
     "systemReadyDesc": "Prediction engine on standby. Upload unstructured data to initialize a simulation sequence.",
-    "metricLowCost": "Low Cost",
-    "metricLowCostDesc": "Avg. $5/sim",
-    "metricHighAvail": "Scalable",
-    "metricHighAvailDesc": "Millions of Agents",
     "workflowSequence": "Workflow",
     "step01Title": "Graph Build",
     "step01Desc": "Seed extraction & memory injection & GraphRAG construction",

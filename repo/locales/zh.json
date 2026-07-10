@@ -23,7 +23,8 @@
     "minutes": "分钟",
     "rounds": "轮",
     "items": "个",
-    "files": "个文件"
+    "files": "个文件",
+    "title": "NemoFish - 本地舆论·情景模拟"
   },
   "meta": {
     "title": "NemoFish - 预测万物",
@@ -33,22 +34,14 @@
     "visitGithub": "访问我们的Github主页"
   },
   "home": {
-    "tagline": "简洁通用的群体智能引擎",
     "version": "/ v0.1-预览版",
     "heroTitle1": "上传任意报告",
     "heroTitle2": "即刻推演未来",
-    "heroDesc": "即使只有一段文字，{brand} 也能基于其中的现实种子，全自动生成与之对应的至多{agentScale}构成的平行世界。通过上帝视角注入变量，在复杂的群体交互中寻找动态环境下的{optimalSolution}",
+    "heroDesc": "上传文档与模拟提示，{brand} 会构建知识图谱，并用基于 Nemotron-Personas-Korea 的韩国画像智能体模拟反应、预测结果。",
     "heroDescBrand": "NemoFish",
-    "heroDescAgentScale": "百万级Agent",
-    "heroDescOptimalSolution": "\"局部最优解\"",
-    "slogan": "让未来在 Agent 群中预演，让决策在百战后胜出",
     "systemStatus": "系统状态",
     "systemReady": "准备就绪",
     "systemReadyDesc": "预测引擎待命中，可上传多份非结构化数据以初始化模拟序列",
-    "metricLowCost": "低成本",
-    "metricLowCostDesc": "常规模拟平均5$/次",
-    "metricHighAvail": "高可用",
-    "metricHighAvailDesc": "最多百万级Agent模拟",
     "workflowSequence": "工作流序列",
     "step01Title": "图谱构建",
     "step01Desc": "现实种子提取 & 个体与群体记忆注入 & GraphRAG构建",
