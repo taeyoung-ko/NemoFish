@@ -1,4 +1,8 @@
-# 🐟 NemoFish
+<p align="center">
+  <img src="nemofish.png" alt="NemoFish" width="200" />
+</p>
+
+# NemoFish
 
 **A fully local, Korean-language public-opinion & scenario simulation engine.**
 
