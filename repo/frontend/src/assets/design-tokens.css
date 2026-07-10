@@ -1,0 +1,163 @@
+/*
+ * NemoFish 전역 디자인 토큰 — Lovable 스타일 (DESIGN.md 기반)
+ *
+ * 규칙: 컴포넌트 scoped 스타일에서 하드코딩 hex 대신 이 CSS 변수를 사용한다.
+ *       (:root 변수는 scoped 스타일에서도 그대로 참조 가능)
+ *
+ * "Warmth through restraint" — 크림색 종이 배경(#f7f4ed, 순백 아님) + 차콜 텍스트(#1c1c1c).
+ * 채도 있는 액센트 없음. 컨테인은 따뜻한 보더(#eceae4)로, 그림자는 얕게. 다크 차콜 버튼 + inset.
+ * 토큰 변수 '이름'은 이전과 동일하게 유지해 컴포넌트 수정 없이 값만 교체.
+ */
+
+:root {
+  /* ===== 액센트 = 차콜 (Lovable은 채도 액센트 대신 차콜이 CTA·강조를 담당) ===== */
+  --primary: #1C1C1C;           /* 다크 버튼/강조 배경 */
+  --on-primary: #FCFBF8;        /* 다크 위 텍스트(오프화이트) */
+  --primary-hover: #000000;     /* hover(살짝 더 진하게; 실제 tactile은 opacity 0.8) */
+  --primary-tint: rgba(28, 28, 28, 0.06);  /* 선택/미세 hover 배경 틴트 */
+
+  /* ===== 잉크(텍스트) — 모두 #1C1C1C 계열/불투명도 ===== */
+  --ink: #1C1C1C;               /* 제목/본문 주 텍스트, near-black warm */
+  --ink-muted: #5F5F5D;         /* 보조 텍스트, 설명, 캡션 */
+  --ink-subdued: rgba(28, 28, 28, 0.45);   /* 3차 메타데이터 */
+
+  /* ===== 캔버스 / 표면 / 보더 (전부 크림) ===== */
+  --canvas: #F7F4ED;            /* 크림 — 순백 금지 */
+  --canvas-subdued: #F7F4ED;    /* 페이지 배경도 크림 */
+  --surface-1: #F7F4ED;         /* 카드/패널 = 페이지와 동일 크림(이음새 없음) */
+  --surface-2: #F0ECE2;         /* 살짝 깊은 크림(중첩 표면 구분) */
+  --border: #ECEAE4;            /* 카드/구분선 — 따뜻한 보더 */
+  --border-subtle: #F0EEE8;     /* 내부 디바이더(더 옅음) */
+  --border-strong: rgba(28, 28, 28, 0.4);  /* 인터랙티브 보더(버튼 아웃라인 등) */
+
+  /* ===== '네비/크롬' 성격 요소 — Lovable엔 다크 셸 없음 → 크림+차콜로 전환 =====
+     기존 --nav-* 이름 유지. (상단바/시스템로그 패널 등이 다크→따뜻한 크림으로 뒤집힘) */
+  --nav-bg: #F0ECE2;            /* 살짝 깊은 크림(헤더/로그 영역 구분) */
+  --nav-bg-2: #E8E3D6;          /* 더 깊은 크림 */
+  --nav-ink: #1C1C1C;           /* 크림 위 차콜 텍스트 */
+  --nav-ink-inactive: #5F5F5D;
+  --nav-active: #1C1C1C;        /* 액티브 = 차콜(색 액센트 없음) */
+
+  /* ===== 링크 = 차콜 + 밑줄이 신호(색 변화 없음), hover 시 옅어짐 ===== */
+  --link: #1C1C1C;
+  --link-hover: #5F5F5D;
+
+  /* ===== 의미 기반 상태색 — 채도 낮춘 어스톤(크림과 조화). 색+텍스트 라벨 병기 ===== */
+  --status-running: #4A7C59;    /* 실행/활성/성공 (뮤트 그린) */
+  --status-stopped: #A8443A;    /* 정지/오류 (뮤트 브릭) */
+  --status-pending: #9C7A32;    /* 대기/경고 (뮤트 오커) */
+  --status-provisioning: #4A6B82; /* 프로비저닝/정보 (뮤트 슬레이트) */
+
+  /* 상태 배경 틴트 (배지/배너) */
+  --status-running-bg: #E7EFE3;
+  --status-stopped-bg: #F3E3E0;
+  --status-pending-bg: #F0E9D8;
+  --status-provisioning-bg: #E4EBEF;
+
+  /* ===== 반경 ===== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+
+  /* ===== 그림자 — 얕게(보더가 컨테인 담당). 다크 버튼 inset은 아래 별도 토큰 ===== */
+  --shadow-card: 0 1px 2px rgba(28, 28, 28, 0.05);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.1);      /* 포커스/액티브 소프트 글로우 */
+  --shadow-modal: 0 8px 24px rgba(0, 0, 0, 0.12);
+  /* 다크 버튼 시그니처 inset(위 하이라이트 + 아래 링/드롭) */
+  --shadow-button-inset: rgba(255,255,255,0.2) 0 0.5px 0 0 inset, rgba(0,0,0,0.2) 0 0 0 0.5px inset, rgba(0,0,0,0.05) 0 1px 2px 0;
+
+  /* ===== 타이포 (Camera Plain Variable, 휴머니스트 · 16px 본문) ===== */
+  --font-sans: "Camera Plain Variable", ui-sans-serif, system-ui, "Noto Sans KR", "Noto Sans SC", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --fs-body: 16px;              /* 표준 읽기 텍스트 */
+  --fs-label: 14px;             /* 라벨/캡션 */
+  --fs-section: 20px;           /* 카드/섹션 헤더 */
+  --fs-title: 36px;             /* 페이지 타이틀 */
+  --fs-display: 48px;           /* 대형 지표값 */
+
+  /* ===== 간격 (8px 기반, 상단부는 넉넉하게) ===== */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-8: 48px;
+
+  /* ===== 모션 ===== */
+  --motion-fast: 100ms;
+  --motion-base: 200ms;
+  --motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== 전역 리셋 + 기본 타이포 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+#app {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--ink);
+  background-color: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* 링크: 밑줄이 인터랙티브 신호(색 변화 최소) */
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+a:hover {
+  color: var(--link-hover);
+}
+
+/* 기계 생성 식별자(ID 류)는 monospace */
+.mono, code, kbd {
+  font-family: var(--font-mono);
+}
+
+/* ===== 스크롤바 ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(28, 28, 28, 0.18);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(28, 28, 28, 0.3);
+}
+
+/* ===== 포커스 링 — Tailwind ring blue(키보드 접근성). 액티브는 소프트 그림자 ===== */
+:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* ===== 모션 감소 선호 존중 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

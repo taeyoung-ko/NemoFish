@@ -1069,17 +1069,20 @@ class OasisProfileGenerator:
         progress_callback: Optional[callable] = None,
         realtime_output_path: Optional[str] = None,
         output_platform: str = "reddit",
+        filters: Optional[Dict[str, Any]] = None,
     ) -> List[OasisAgentProfile]:
         """Nemotron-Personas-Korea 데이터셋에서 count명을 샘플링해 OASIS 프로필 생성.
 
         LLM 기반 generate_profiles_from_entities의 대체 경로. 씨앗 자료와 무관하게
         통계 기반 한국인 인구 표본으로 에이전트 군중을 구성한다. LLM 호출 없음(빠름).
+
+        filters가 주어지면 조건(성별/지역/나이 등)을 만족하는 표본 중에서만 랜덤 샘플링.
         """
         from .nemotron_loader import sample_profiles
 
         profiles: List[OasisAgentProfile] = []
         # 로컬 사전전처리 풀 우선(다운로드/네트워크 없이 즉시), 없으면 스트리밍 폴백
-        for idx, d in enumerate(sample_profiles(count, seed=seed)):
+        for idx, d in enumerate(sample_profiles(count, seed=seed, filters=filters)):
             name = d["name"]
             profile = OasisAgentProfile(
                 user_id=idx,
@@ -1260,16 +1263,25 @@ class OasisProfileGenerator:
                 # OASIS必需字段 - 确保都有默认值
                 "age": profile.age if profile.age else 30,
                 "gender": self._normalize_gender(profile.gender),
-                "mbti": profile.mbti if profile.mbti else "ISTJ",
-                "country": profile.country if profile.country else "中国",
+                "country": profile.country if profile.country else "대한민국",
             }
-            
+            # MBTI: Nemotron 데이터셋엔 없음 → 있을 때만 기록(억지로 만들지 않음)
+            if profile.mbti:
+                item["mbti"] = profile.mbti
+
             # 可选字段
             if profile.profession:
                 item["profession"] = profile.profession
             if profile.interested_topics:
                 item["interested_topics"] = profile.interested_topics
-            
+            # Nemotron 인구통계/스킬 — 카드 표시 + OASIS 프롬프트 주입(patch_oasis)에 사용.
+            # 여기서 빠지면 reddit_profiles.json에 안 실려 카드도 비고 프롬프트 주입도 빈다.
+            for _k in ("skills", "province", "district", "education_level", "bachelors_field",
+                       "marital_status", "military_status", "family_type", "housing_type"):
+                _v = getattr(profile, _k, None)
+                if _v:
+                    item[_k] = _v
+
             data.append(item)
         
         with open(file_path, 'w', encoding='utf-8') as f:

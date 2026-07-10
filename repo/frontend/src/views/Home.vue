@@ -333,35 +333,20 @@ const startSimulation = () => {
 </script>
 
 <style scoped>
-/* 全局变量与重置 */
-:root {
-  --black: #000000;
-  --white: #FFFFFF;
-  --orange: #FF4500;
-  --gray-light: #F5F5F5;
-  --gray-text: #666666;
-  --border: #E5E5E5;
-  /* 
-    使用 Space Grotesk 作为主要标题字体，JetBrains Mono 作为代码/标签字体
-    确保已在 index.html 引入这些 Google Fonts 
-  */
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'Space Grotesk', 'Noto Sans KR', 'Noto Sans SC', system-ui, sans-serif;
-  --font-cn: 'Noto Sans KR', 'Noto Sans SC', system-ui, sans-serif;
-}
+/* 색/폰트/반경/그림자는 전역 :root 토큰(design-tokens.css)을 사용한다 */
 
 .home-container {
   min-height: 100vh;
-  background: var(--white);
+  background: var(--canvas-subdued);
   font-family: var(--font-sans);
-  color: var(--black);
+  color: var(--ink);
 }
 
 /* 顶部导航 */
 .navbar {
   height: 60px;
-  background: var(--black);
-  color: var(--white);
+  background: var(--nav-bg);
+  color: var(--nav-ink);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -369,7 +354,7 @@ const startSimulation = () => {
 }
 
 .nav-brand {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-weight: 800;
   letter-spacing: 1px;
   font-size: 1.2rem;
@@ -382,15 +367,15 @@ const startSimulation = () => {
 }
 
 .github-link {
-  color: var(--white);
+  color: var(--nav-ink);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: opacity 0.2s;
+  transition: opacity var(--motion-base);
 }
 
 .github-link:hover {
@@ -398,7 +383,7 @@ const startSimulation = () => {
 }
 
 .arrow {
-  font-family: sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 主要内容区 */
@@ -426,21 +411,22 @@ const startSimulation = () => {
   align-items: center;
   gap: 15px;
   margin-bottom: 25px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
 }
 
 .orange-tag {
-  background: var(--orange);
-  color: var(--white);
+  background: var(--primary);
+  color: var(--on-primary);
   padding: 4px 10px;
   font-weight: 700;
   letter-spacing: 1px;
-  font-size: 0.75rem;
+  font-size: var(--fs-label);
+  border-radius: var(--radius-sm);
 }
 
 .version-text {
-  color: #999;
+  color: var(--ink-subdued);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
@@ -451,20 +437,18 @@ const startSimulation = () => {
   font-weight: 500;
   margin: 0 0 40px 0;
   letter-spacing: -2px;
-  color: var(--black);
+  color: var(--ink);
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #000000 0%, #444444 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--ink);
   display: inline-block;
 }
 
 .hero-desc {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: var(--gray-text);
+  color: var(--ink-muted);
   max-width: 640px;
   margin-bottom: 50px;
   font-weight: 400;
@@ -476,38 +460,38 @@ const startSimulation = () => {
 }
 
 .highlight-bold {
-  color: var(--black);
+  color: var(--ink);
   font-weight: 700;
 }
 
 .highlight-orange {
-  color: var(--orange);
+  color: var(--link);
   font-weight: 700;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
 }
 
 .highlight-code {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--surface-2);
   padding: 2px 6px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.9em;
-  color: var(--black);
+  color: var(--ink);
   font-weight: 600;
 }
 
 .slogan-text {
   font-size: 1.2rem;
   font-weight: 520;
-  color: var(--black);
+  color: var(--ink);
   letter-spacing: 1px;
-  border-left: 3px solid var(--orange);
+  border-left: 3px solid var(--primary);
   padding-left: 15px;
   margin-top: 20px;
 }
 
 .blinking-cursor {
-  color: var(--orange);
+  color: var(--link);
   animation: blink 1s step-end infinite;
   font-weight: 700;
 }
@@ -520,7 +504,7 @@ const startSimulation = () => {
 .decoration-square {
   width: 16px;
   height: 16px;
-  background: var(--orange);
+  background: var(--primary);
 }
 
 .hero-right {
@@ -547,18 +531,20 @@ const startSimulation = () => {
   width: 40px;
   height: 40px;
   border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--orange);
+  color: var(--link);
   font-size: 1.2rem;
-  transition: all 0.2s;
+  transition: all var(--motion-base);
 }
 
 .scroll-down-btn:hover {
-  border-color: var(--orange);
+  border-color: var(--primary);
+  background: var(--primary-tint);
 }
 
 /* Dashboard 双栏布局 */
@@ -582,9 +568,11 @@ const startSimulation = () => {
 }
 
 .panel-header {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: #999;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -592,7 +580,7 @@ const startSimulation = () => {
 }
 
 .status-dot {
-  color: var(--orange);
+  color: var(--status-running);
   font-size: 0.8rem;
 }
 
@@ -600,10 +588,11 @@ const startSimulation = () => {
   font-size: 2rem;
   font-weight: 520;
   margin: 0 0 15px 0;
+  color: var(--ink);
 }
 
 .section-desc {
-  color: var(--gray-text);
+  color: var(--ink-muted);
   margin-bottom: 25px;
   line-height: 1.6;
 }
@@ -616,33 +605,42 @@ const startSimulation = () => {
 
 .metric-card {
   border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-card);
   padding: 20px 30px;
   min-width: 150px;
 }
 
 .metric-value {
   font-family: var(--font-mono);
-  font-size: 1.8rem;
-  font-weight: 520;
+  font-size: var(--fs-display);
+  font-weight: 700;
+  color: var(--ink);
   margin-bottom: 5px;
 }
 
 .metric-label {
-  font-size: 0.85rem;
-  color: #999;
+  font-size: var(--fs-label);
+  color: var(--ink-subdued);
 }
 
 /* 项目模拟步骤介绍 */
 .steps-container {
   border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-card);
   padding: 30px;
   position: relative;
 }
 
 .steps-header {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: #999;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
   margin-bottom: 25px;
   display: flex;
   align-items: center;
@@ -669,8 +667,7 @@ const startSimulation = () => {
 .step-num {
   font-family: var(--font-mono);
   font-weight: 700;
-  color: var(--black);
-  opacity: 0.3;
+  color: var(--ink-subdued);
 }
 
 .step-info {
@@ -678,14 +675,15 @@ const startSimulation = () => {
 }
 
 .step-title {
-  font-weight: 520;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: var(--fs-section);
+  color: var(--ink);
   margin-bottom: 4px;
 }
 
 .step-desc {
-  font-size: 0.85rem;
-  color: var(--gray-text);
+  font-size: var(--fs-body);
+  color: var(--ink-muted);
 }
 
 /* 右侧交互控制台 */
@@ -694,7 +692,10 @@ const startSimulation = () => {
 }
 
 .console-box {
-  border: 1px solid #CCC; /* 外部实线 */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-card);
   padding: 8px; /* 内边距形成双重边框感 */
 }
 
@@ -710,21 +711,24 @@ const startSimulation = () => {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #666;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
 }
 
 .upload-zone {
-  border: 1px dashed #CCC;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
   height: 200px;
   overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s;
-  background: #FAFAFA;
+  transition: all var(--motion-base);
+  background: var(--surface-2);
 }
 
 .upload-zone.has-files {
@@ -732,8 +736,13 @@ const startSimulation = () => {
 }
 
 .upload-zone:hover {
-  background: #F0F0F0;
-  border-color: #999;
+  background: var(--border-subtle);
+  border-color: var(--ink-subdued);
+}
+
+.upload-zone.drag-over {
+  background: var(--primary-tint);
+  border-color: var(--primary);
 }
 
 .upload-placeholder {
@@ -743,24 +752,26 @@ const startSimulation = () => {
 .upload-icon {
   width: 40px;
   height: 40px;
-  border: 1px solid #DDD;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 15px;
-  color: #999;
+  color: var(--ink-subdued);
 }
 
 .upload-title {
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: var(--fs-body);
+  color: var(--ink);
   margin-bottom: 5px;
 }
 
 .upload-hint {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #999;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  color: var(--ink-subdued);
 }
 
 .file-list {
@@ -774,11 +785,12 @@ const startSimulation = () => {
 .file-item {
   display: flex;
   align-items: center;
-  background: var(--white);
+  background: var(--surface-1);
   padding: 8px 12px;
-  border: 1px solid #EEE;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: var(--fs-body);
 }
 
 .file-name {
@@ -791,7 +803,12 @@ const startSimulation = () => {
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--ink-subdued);
+  transition: color var(--motion-fast);
+}
+
+.remove-btn:hover {
+  color: var(--status-stopped);
 }
 
 .console-divider {
@@ -805,21 +822,27 @@ const startSimulation = () => {
   content: '';
   flex: 1;
   height: 1px;
-  background: #EEE;
+  background: var(--border-subtle);
 }
 
 .console-divider span {
   padding: 0 15px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: #BBB;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  color: var(--ink-subdued);
   letter-spacing: 1px;
 }
 
 .input-wrapper {
   position: relative;
-  border: 1px solid #DDD;
-  background: #FAFAFA;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  transition: border-color var(--motion-fast);
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--link);
 }
 
 .code-input {
@@ -828,7 +851,8 @@ const startSimulation = () => {
   background: transparent;
   padding: 20px;
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: var(--fs-body);
+  color: var(--ink);
   line-height: 1.6;
   resize: vertical;
   outline: none;
@@ -840,39 +864,40 @@ const startSimulation = () => {
   bottom: 10px;
   right: 15px;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: #AAA;
+  font-size: var(--fs-label);
+  color: var(--ink-subdued);
 }
 
 .start-engine-btn {
   width: 100%;
-  background: var(--black);
-  color: var(--white);
-  border: none;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-md);
   padding: 20px;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 1px;
+  transition: all var(--motion-base) var(--motion-easing);
+  letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
 }
 
 /* 可点击状态（非禁用） */
 .start-engine-btn:not(:disabled) {
-  background: var(--black);
-  border: 1px solid var(--black);
+  background: var(--primary);
+  border: 1px solid var(--primary);
   animation: pulse-border 2s infinite;
 }
 
 .start-engine-btn:hover:not(:disabled) {
-  background: var(--orange);
-  border-color: var(--orange);
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
   transform: translateY(-2px);
 }
 
@@ -881,18 +906,18 @@ const startSimulation = () => {
 }
 
 .start-engine-btn:disabled {
-  background: #E5E5E5;
-  color: #999;
+  background: var(--surface-2);
+  color: var(--ink-subdued);
   cursor: not-allowed;
   transform: none;
-  border: 1px solid #E5E5E5;
+  border: 1px solid var(--border);
 }
 
-/* 引导动画：微妙的边框脉冲 */
+/* 引导动画：미묘한 오렌지 보더 펄스 */
 @keyframes pulse-border {
-  0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
-  70% { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.35); }
+  70% { box-shadow: 0 0 0 6px rgba(255, 153, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
 }
 
 /* 响应式适配 */
@@ -921,32 +946,32 @@ const startSimulation = () => {
 /* English locale adjustments (unscoped to target html[lang]) */
 html[lang="en"] .main-title {
   font-size: 3.5rem;
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: -1px;
 }
 
 html[lang="en"] .hero-desc {
   text-align: left;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 0;
 }
 
 html[lang="en"] .slogan-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 0;
 }
 
 html[lang="en"] .tag-row {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 
 html[lang="en"] .navbar .nav-links {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Left pane: system status + workflow */
 html[lang="en"] .status-section {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 
 html[lang="en"] .status-section .status-ready {
@@ -954,21 +979,21 @@ html[lang="en"] .status-section .status-ready {
 }
 
 html[lang="en"] .status-section .metric-value {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-mono);
   font-size: 1.4rem;
 }
 
 html[lang="en"] .workflow-list .step-title {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 
 html[lang="en"] .workflow-list .step-desc {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: var(--font-sans) !important;
   font-size: 0.72rem !important;
   line-height: 1.4 !important;
 }
 
 html[lang="en"] .workflow-list {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
 }
 </style>

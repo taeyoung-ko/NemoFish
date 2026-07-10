@@ -236,7 +236,8 @@ class SimulationManager:
         use_llm_for_profiles: bool = True,
         progress_callback: Optional[callable] = None,
         parallel_profile_count: int = 3,
-        nemotron_count: Optional[int] = None
+        nemotron_count: Optional[int] = None,
+        nemotron_filters: Optional[dict] = None
     ) -> SimulationState:
         """
         准备模拟环境（全程自动化）
@@ -354,6 +355,7 @@ class SimulationManager:
                     progress_callback=profile_progress,
                     realtime_output_path=realtime_output_path,
                     output_platform=realtime_platform,
+                    filters=nemotron_filters,  # 조건 필터(없으면 전체 랜덤)
                 )
             else:
                 profiles = generator.generate_profiles_from_entities(

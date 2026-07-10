@@ -194,7 +194,15 @@
     "profileModalSkills": "专业技能",
     "agentCountLabel": "Agent 数量",
     "agentCountRecommended": "推荐: {n}",
-    "startGenerate": "生成人设"
+    "startGenerate": "生成人设",
+    "filterModeLabel": "采样方式",
+    "filterAll": "完全随机",
+    "filterByCondition": "按条件筛选",
+    "filterAgeRange": "年龄范围",
+    "filterCounting": "统计中...",
+    "filterMatchPreview": "从符合条件的 {matched} 人中随机选取 {count} 人",
+    "filterMatchWarning": "仅 {matched} 人符合条件（请求 {count} 人）— 将全部使用",
+    "filterClear": "重置"
   },
   "step3": {
     "startGenerateReport": "开始生成结果报告",

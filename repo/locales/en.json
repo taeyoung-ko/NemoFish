@@ -194,7 +194,15 @@
     "profileModalSkills": "Skills",
     "agentCountLabel": "Number of Agents",
     "agentCountRecommended": "Recommended: {n}",
-    "startGenerate": "Generate Personas"
+    "startGenerate": "Generate Personas",
+    "filterModeLabel": "Sampling mode",
+    "filterAll": "Fully random",
+    "filterByCondition": "Filter by condition",
+    "filterAgeRange": "Age range",
+    "filterCounting": "Counting...",
+    "filterMatchPreview": "Randomly pick {count} of {matched} matching personas",
+    "filterMatchWarning": "Only {matched} personas match (requested {count}) — all will be used",
+    "filterClear": "Reset"
   },
   "step3": {
     "startGenerateReport": "Generate Report",

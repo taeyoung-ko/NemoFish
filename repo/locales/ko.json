@@ -194,7 +194,15 @@
     "profileModalSkills": "전문 스킬",
     "agentCountLabel": "에이전트 수",
     "agentCountRecommended": "추천: {n}",
-    "startGenerate": "페르소나 생성 시작"
+    "startGenerate": "페르소나 생성 시작",
+    "filterModeLabel": "샘플링 방식",
+    "filterAll": "전체 랜덤",
+    "filterByCondition": "조건 필터",
+    "filterAgeRange": "나이 범위",
+    "filterCounting": "집계 중...",
+    "filterMatchPreview": "조건 만족 {matched}명 중 {count}명 랜덤 선택",
+    "filterMatchWarning": "조건 만족 표본이 {matched}명뿐 (요청 {count}명) — 전부 사용됩니다",
+    "filterClear": "초기화"
   },
   "step3": {
     "startGenerateReport": "리포트 생성",

@@ -160,6 +160,54 @@ def get_entities_by_type(graph_id: str, entity_type: str):
         }), 500
 
 
+# ============== Nemotron 퍼소나 필터 선택지 ==============
+
+@simulation_bp.route('/nemotron/facets', methods=['GET'])
+def get_nemotron_facets():
+    """Nemotron 로컬 풀에서 조건 필터 가능한 필드별 선택지(값+개수)를 반환.
+
+    GUI가 '조건 필터 후 랜덤' UI를 구성하는 데 사용.
+    풀이 아직 없으면 available=False → GUI는 전체 랜덤만 노출.
+
+    반환:
+        {
+            "success": true,
+            "data": {
+                "available": true,
+                "total": 20000,
+                "fields": {
+                    "gender": {"type": "categorical", "values": [{"value": "male", "count": 1}, ...]},
+                    "province": {"type": "categorical", "values": [...]},
+                    "age": {"type": "range", "min": 18, "max": 90}
+                }
+            }
+        }
+    """
+    try:
+        from ..services.nemotron_loader import pool_facets
+        return jsonify({"success": True, "data": pool_facets()})
+    except Exception as e:
+        logger.error(f"获取Nemotron facets失败: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@simulation_bp.route('/nemotron/count', methods=['POST'])
+def count_nemotron_matching():
+    """주어진 조건 필터를 만족하는 Nemotron 표본 수를 반환(GUI 실시간 미리보기).
+
+    요청(JSON): { "filters": { "gender": ["female"], "age": {"min":20,"max":39} } }
+    반환: { "success": true, "data": { "available": true, "total": 20000, "matched": 2701 } }
+    """
+    try:
+        from ..services.nemotron_loader import count_matching
+        data = request.get_json() or {}
+        filters = data.get('filters') or None
+        return jsonify({"success": True, "data": count_matching(filters)})
+    except Exception as e:
+        logger.error(f"计算Nemotron匹配数失败: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 # ============== 模拟管理接口 ==============
 
 @simulation_bp.route('/create', methods=['POST'])
@@ -469,7 +517,9 @@ def prepare_simulation():
         parallel_profile_count = data.get('parallel_profile_count', 5)
         # GUI에서 지정한 에이전트(퍼소나) 수. Nemotron 모드에서 사용. 없으면 env/엔티티수 사용.
         nemotron_count = data.get('nemotron_agent_count')
-        
+        # GUI에서 지정한 조건 필터(성별/지역/나이 등). 있으면 조건 만족 표본 중 랜덤 샘플링.
+        nemotron_filters = data.get('nemotron_filters') or None
+
         # ========== 同步获取实体数量（在后台任务启动前） ==========
         # 这样前端在调用prepare后立即就能获取到预期Agent总数
         try:
@@ -601,7 +651,8 @@ def prepare_simulation():
                     use_llm_for_profiles=use_llm_for_profiles,
                     progress_callback=progress_callback,
                     parallel_profile_count=parallel_profile_count,
-                    nemotron_count=nemotron_count
+                    nemotron_count=nemotron_count,
+                    nemotron_filters=nemotron_filters
                 )
                 
                 # 任务完成

@@ -25,6 +25,22 @@ export const getPrepareStatus = (data) => {
 }
 
 /**
+ * Nemotron 퍼소나 조건 필터 선택지(값+개수) 조회
+ * 반환: { available, total, fields: { <field>: { type, values|min|max } } }
+ */
+export const getNemotronFacets = () => {
+  return service.get('/api/simulation/nemotron/facets')
+}
+
+/**
+ * 조건 필터를 만족하는 Nemotron 표본 수 조회(실시간 미리보기)
+ * @param {Object} filters - { gender: [...], province: [...], age: {min,max} }
+ */
+export const countNemotronMatching = (filters) => {
+  return service.post('/api/simulation/nemotron/count', { filters })
+}
+
+/**
  * 获取模拟状态
  * @param {string} simulationId
  */

@@ -307,29 +307,32 @@ onMounted(async () => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #FFF;
+  background: var(--surface-1);
   overflow: hidden;
-  font-family: 'Space Grotesk', 'Noto Sans KR', 'Noto Sans SC', system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  color: var(--ink);
 }
 
 /* Header */
 .app-header {
-  height: 60px;
-  border-bottom: 1px solid #EAEAEA;
+  height: 56px;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  background: #FFF;
+  padding: 0 var(--sp-6);
+  background: var(--surface-1);
   z-index: 100;
   position: relative;
 }
 
 .brand {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: 800;
   font-size: 18px;
   letter-spacing: 1px;
+  color: var(--ink);
   cursor: pointer;
 }
 
@@ -341,9 +344,9 @@ onMounted(async () => {
 
 .view-switcher {
   display: flex;
-  background: #F5F5F5;
+  background: var(--surface-2);
   padding: 4px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   gap: 4px;
 }
 
@@ -351,69 +354,69 @@ onMounted(async () => {
   border: none;
   background: transparent;
   padding: 6px 16px;
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 600;
-  color: #666;
-  border-radius: 4px;
+  color: var(--ink-muted);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .switch-btn.active {
-  background: #FFF;
-  color: #000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: var(--surface-1);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--sp-4);
 }
 
 .workflow-step {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: var(--sp-2);
+  font-size: var(--fs-body);
 }
 
 .step-num {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: 700;
-  color: #999;
+  color: var(--ink-subdued);
 }
 
 .step-name {
   font-weight: 700;
-  color: #000;
+  color: var(--ink);
 }
 
 .step-divider {
   width: 1px;
   height: 14px;
-  background-color: #E0E0E0;
+  background-color: var(--border);
 }
 
 .status-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #666;
+  gap: var(--sp-2);
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
   font-weight: 500;
 }
 
 .dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background: #CCC;
+  border-radius: var(--radius-pill);
+  background: var(--ink-subdued);
 }
 
-.status-indicator.processing .dot { background: #FF5722; animation: pulse 1s infinite; }
-.status-indicator.completed .dot { background: #4CAF50; }
-.status-indicator.error .dot { background: #F44336; }
+.status-indicator.processing .dot { background: var(--status-pending); animation: pulse 1s infinite; }
+.status-indicator.completed .dot { background: var(--status-running); }
+.status-indicator.error .dot { background: var(--status-stopped); }
 
 @keyframes pulse { 50% { opacity: 0.5; } }
 
@@ -433,7 +436,7 @@ onMounted(async () => {
 }
 
 .panel-wrapper.left {
-  border-right: 1px solid #EAEAEA;
+  border-right: 1px solid var(--border);
 }
 </style>
 

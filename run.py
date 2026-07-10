@@ -113,20 +113,25 @@ def main():
         except Exception as e:
             print(f"[경고] OASIS 패치 실행 실패(수동으로 python scripts/patch_oasis.py): {e}", flush=True)
 
-    # Nemotron 로컬 풀이 없으면 백그라운드로 생성(다운로드+전처리). 있으면 스킵.
-    # 생성 중/전엔 시뮬레이션이 스트리밍으로 자동 폴백하므로 기동을 막지 않음.
+    # Nemotron 로컬 풀이 없으면 백그라운드로 생성(전체 100만 다운로드+전처리). 있으면 스킵.
+    # git clone 후 첫 `python run.py`에서 자동 생성된다. 수십 분 걸릴 수 있으나 기동은 막지 않고,
+    # 완료 전엔 시뮬레이션이 스트리밍으로 자동 폴백한다. 진행상황은 로그파일에서 확인 가능.
     _pool = os.environ.get("NEMOTRON_POOL_PATH") or os.path.join(
         BACKEND, "app", "data", "nemotron_profiles.jsonl")
     _prep = os.path.join(HERE, "scripts", "prepare_nemotron.py")
     if os.path.exists(_prep) and not os.path.exists(_pool):
-        print("· Nemotron 로컬 풀 없음 → 백그라운드로 생성 시작 "
-              "(완료 전 첫 시뮬은 스트리밍 폴백)", flush=True)
+        _prep_log = os.path.join(BACKEND, "app", "data", "prepare_nemotron.log")
+        os.makedirs(os.path.dirname(_prep_log), exist_ok=True)
+        print("· Nemotron 로컬 풀 없음 → 백그라운드로 전체(100만) 생성 시작.\n"
+              f"    진행 로그:  tail -f {_prep_log}\n"
+              "    (완료 전 첫 시뮬은 스트리밍 폴백 — 기동은 막지 않음)", flush=True)
         try:
+            _logf = open(_prep_log, "w")
             subprocess.Popen(
                 [NEMOFISH_PY, _prep],
                 cwd=HERE,
                 env={**os.environ, "HF_HUB_ENABLE_HF_TRANSFER": "1"},
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                stdout=_logf, stderr=subprocess.STDOUT,
                 start_new_session=True,
             )
         except Exception as e:

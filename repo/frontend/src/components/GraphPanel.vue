@@ -52,7 +52,7 @@
         <div v-if="selectedItem" class="detail-panel">
           <div class="detail-panel-header">
             <span class="detail-title">{{ selectedItem.type === 'node' ? $t('graph.nodeDetails') : $t('graph.relationship') }}</span>
-            <span v-if="selectedItem.type === 'node'" class="detail-type-badge" :style="{ background: selectedItem.color, color: '#fff' }">
+            <span v-if="selectedItem.type === 'node'" class="detail-type-badge" :style="{ background: selectedItem.color, color: 'var(--on-primary)' }">
               {{ selectedItem.entityType }}
             </span>
             <button class="detail-close" @click="closeDetailPanel">×</button>
@@ -285,8 +285,8 @@ const toggleSelfLoop = (id) => {
 const entityTypes = computed(() => {
   if (!props.graphData?.nodes) return []
   const typeMap = {}
-  // 美观的颜色调色板
-  const colors = ['#FF6B35', '#004E89', '#7B2D8E', '#1A936F', '#C5283D', '#E9724C', '#3498db', '#9b59b6', '#27ae60', '#f39c12']
+  // Lovable 팔레트 기반 조색(차콜/어스톤 뮤트) — 크림 배경과 조화, 채도 낮춤
+  const colors = ['#1C1C1C', '#4A6B82', '#4A7C59', '#A8443A', '#9C7A32', '#5C7E96', '#5F5F5D', '#8A6D3B', '#3B5468', '#93A1A8']
   
   props.graphData.nodes.forEach(node => {
     const type = node.labels?.find(l => l !== 'Entity') || 'Entity'
@@ -466,7 +466,7 @@ const renderGraph = () => {
   // Color scale
   const colorMap = {}
   entityTypes.value.forEach(t => colorMap[t.name] = t.color)
-  const getColor = (type) => colorMap[type] || '#999'
+  const getColor = (type) => colorMap[type] || '#879596'
 
   // Simulation - 根据边数量动态调整节点间距
   const simulation = d3.forceSimulation(nodes)
@@ -571,18 +571,18 @@ const renderGraph = () => {
   const link = linkGroup.selectAll('path')
     .data(edges)
     .enter().append('path')
-    .attr('stroke', '#C0C0C0')
+    .attr('stroke', '#879596')
     .attr('stroke-width', 1.5)
     .attr('fill', 'none')
     .style('cursor', 'pointer')
     .on('click', (event, d) => {
       event.stopPropagation()
       // 重置之前选中边的样式
-      linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
+      linkGroup.selectAll('path').attr('stroke', '#879596').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
-      linkLabels.attr('fill', '#666')
+      linkLabels.attr('fill', '#545B64')
       // 高亮当前选中的边
-      d3.select(event.target).attr('stroke', '#3498db').attr('stroke-width', 3)
+      d3.select(event.target).attr('stroke', '#1C1C1C').attr('stroke-width', 3)
       
       selectedItem.value = {
         type: 'edge',
@@ -602,11 +602,11 @@ const renderGraph = () => {
     .style('display', showEdgeLabels.value ? 'block' : 'none')
     .on('click', (event, d) => {
       event.stopPropagation()
-      linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
+      linkGroup.selectAll('path').attr('stroke', '#879596').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
-      linkLabels.attr('fill', '#666')
+      linkLabels.attr('fill', '#545B64')
       // 高亮对应的边
-      link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
+      link.filter(l => l === d).attr('stroke', '#1C1C1C').attr('stroke-width', 3)
       d3.select(event.target).attr('fill', 'rgba(52, 152, 219, 0.1)')
       
       selectedItem.value = {
@@ -621,21 +621,21 @@ const renderGraph = () => {
     .enter().append('text')
     .text(d => d.name)
     .attr('font-size', '9px')
-    .attr('fill', '#666')
+    .attr('fill', '#545B64')
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('cursor', 'pointer')
     .style('pointer-events', 'all')
-    .style('font-family', 'system-ui, sans-serif')
+    .style('font-family', 'var(--font-sans)')
     .style('display', showEdgeLabels.value ? 'block' : 'none')
     .on('click', (event, d) => {
       event.stopPropagation()
-      linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
+      linkGroup.selectAll('path').attr('stroke', '#879596').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
-      linkLabels.attr('fill', '#666')
+      linkLabels.attr('fill', '#545B64')
       // 高亮对应的边
-      link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
-      d3.select(event.target).attr('fill', '#3498db')
+      link.filter(l => l === d).attr('stroke', '#1C1C1C').attr('stroke-width', 3)
+      d3.select(event.target).attr('fill', '#1C1C1C')
       
       selectedItem.value = {
         type: 'edge',
@@ -699,12 +699,12 @@ const renderGraph = () => {
       event.stopPropagation()
       // 重置所有节点样式
       node.attr('stroke', '#fff').attr('stroke-width', 2.5)
-      linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
+      linkGroup.selectAll('path').attr('stroke', '#879596').attr('stroke-width', 1.5)
       // 高亮选中节点
-      d3.select(event.target).attr('stroke', '#E91E63').attr('stroke-width', 4)
+      d3.select(event.target).attr('stroke', '#1C1C1C').attr('stroke-width', 4)
       // 高亮与此节点相连的边
       link.filter(l => l.source.id === d.id || l.target.id === d.id)
-        .attr('stroke', '#E91E63')
+        .attr('stroke', '#1C1C1C')
         .attr('stroke-width', 2.5)
       
       selectedItem.value = {
@@ -716,7 +716,7 @@ const renderGraph = () => {
     })
     .on('mouseenter', (event, d) => {
       if (!selectedItem.value || selectedItem.value.data?.uuid !== d.rawData.uuid) {
-        d3.select(event.target).attr('stroke', '#333').attr('stroke-width', 3)
+        d3.select(event.target).attr('stroke', '#16191F').attr('stroke-width', 3)
       }
     })
     .on('mouseleave', (event, d) => {
@@ -731,12 +731,12 @@ const renderGraph = () => {
     .enter().append('text')
     .text(d => d.name.length > 8 ? d.name.substring(0, 8) + '…' : d.name)
     .attr('font-size', '11px')
-    .attr('fill', '#333')
+    .attr('fill', '#16191F')
     .attr('font-weight', '500')
     .attr('dx', 14)
     .attr('dy', 4)
     .style('pointer-events', 'none')
-    .style('font-family', 'system-ui, sans-serif')
+    .style('font-family', 'var(--font-sans)')
 
   simulation.on('tick', () => {
     // 更新曲线路径
@@ -777,9 +777,9 @@ const renderGraph = () => {
   svg.on('click', () => {
     selectedItem.value = null
     node.attr('stroke', '#fff').attr('stroke-width', 2.5)
-    linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
+    linkGroup.selectAll('path').attr('stroke', '#879596').attr('stroke-width', 1.5)
     linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
-    linkLabels.attr('fill', '#666')
+    linkLabels.attr('fill', '#545B64')
   })
 }
 
@@ -818,10 +818,11 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #FAFAFA;
-  background-image: radial-gradient(#D0D0D0 1.5px, transparent 1.5px);
+  background-color: var(--canvas-subdued);
+  background-image: radial-gradient(var(--border) 1.5px, transparent 1.5px);
   background-size: 24px 24px;
   overflow: hidden;
+  font-family: var(--font-sans);
 }
 
 .panel-header {
@@ -839,9 +840,9 @@ onUnmounted(() => {
 }
 
 .panel-title {
-  font-size: 14px;
+  font-size: var(--fs-body);
   font-weight: 600;
-  color: #333;
+  color: var(--ink);
   pointer-events: auto;
 }
 
@@ -855,28 +856,28 @@ onUnmounted(() => {
 .tool-btn {
   height: 32px;
   padding: 0 12px;
-  border: 1px solid #E0E0E0;
-  background: #FFF;
-  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  color: #666;
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-  font-size: 13px;
+  color: var(--ink-muted);
+  transition: all var(--motion-base);
+  box-shadow: var(--shadow-card);
+  font-size: var(--fs-body);
 }
 
 .tool-btn:hover {
-  background: #F5F5F5;
-  color: #000;
-  border-color: #CCC;
+  background: var(--surface-2);
+  color: var(--ink);
+  border-color: var(--ink-subdued);
 }
 
 .tool-btn .btn-text {
-  font-size: 12px;
+  font-size: var(--fs-label);
 }
 
 .icon-refresh.spinning {
@@ -902,7 +903,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #999;
+  color: var(--ink-subdued);
 }
 
 .empty-icon {
@@ -918,17 +919,17 @@ onUnmounted(() => {
   left: 24px;
   background: rgba(255,255,255,0.95);
   padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #EAEAEA;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
   z-index: 10;
 }
 
 .legend-title {
   display: block;
   font-size: 11px;
-  font-weight: 600;
-  color: #E91E63;
+  font-weight: 700;
+  color: var(--ink-muted);
   margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -945,8 +946,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: #555;
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
 }
 
 .legend-dot {
@@ -968,11 +969,11 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #FFF;
+  background: var(--surface-1);
   padding: 8px 14px;
-  border-radius: 20px;
-  border: 1px solid #E0E0E0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   z-index: 10;
 }
 
@@ -996,9 +997,9 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #E0E0E0;
-  border-radius: 22px;
-  transition: 0.3s;
+  background-color: var(--border);
+  border-radius: var(--radius-pill);
+  transition: var(--motion-base);
 }
 
 .slider:before {
@@ -1008,13 +1009,13 @@ onUnmounted(() => {
   width: 16px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--surface-1);
   border-radius: 50%;
-  transition: 0.3s;
+  transition: var(--motion-base);
 }
 
 input:checked + .slider {
-  background-color: #7B2D8E;
+  background-color: var(--primary);
 }
 
 input:checked + .slider:before {
@@ -1022,8 +1023,8 @@ input:checked + .slider:before {
 }
 
 .toggle-label {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
 }
 
 /* Detail Panel - Right Side */
@@ -1033,13 +1034,13 @@ input:checked + .slider:before {
   right: 20px;
   width: 320px;
   max-height: calc(100% - 100px);
-  background: #FFF;
-  border: 1px solid #EAEAEA;
-  border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
   overflow: hidden;
-  font-family: 'Noto Sans KR', 'Noto Sans SC', system-ui, sans-serif;
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
   z-index: 20;
   display: flex;
   flex-direction: column;
@@ -1050,20 +1051,20 @@ input:checked + .slider:before {
   justify-content: space-between;
   align-items: center;
   padding: 14px 16px;
-  background: #FAFAFA;
-  border-bottom: 1px solid #EEE;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-subtle);
   flex-shrink: 0;
 }
 
 .detail-title {
   font-weight: 600;
-  color: #333;
-  font-size: 14px;
+  color: var(--ink);
+  font-size: var(--fs-body);
 }
 
 .detail-type-badge {
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-pill);
   font-size: 11px;
   font-weight: 500;
   margin-left: auto;
@@ -1075,14 +1076,14 @@ input:checked + .slider:before {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #999;
+  color: var(--ink-subdued);
   line-height: 1;
   padding: 0;
-  transition: color 0.2s;
+  transition: color var(--motion-base);
 }
 
 .detail-close:hover {
-  color: #333;
+  color: var(--ink);
 }
 
 .detail-content {
@@ -1099,39 +1100,39 @@ input:checked + .slider:before {
 }
 
 .detail-label {
-  color: #888;
-  font-size: 12px;
+  color: var(--ink-muted);
+  font-size: var(--fs-label);
   font-weight: 500;
   min-width: 80px;
 }
 
 .detail-value {
-  color: #333;
+  color: var(--ink);
   flex: 1;
   word-break: break-word;
 }
 
 .detail-value.uuid-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
-  color: #666;
+  color: var(--ink-muted);
 }
 
 .detail-value.fact-text {
   line-height: 1.5;
-  color: #444;
+  color: var(--ink-muted);
 }
 
 .detail-section {
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid #F0F0F0;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .section-title {
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 600;
-  color: #666;
+  color: var(--ink-muted);
   margin-bottom: 10px;
 }
 
@@ -1147,20 +1148,20 @@ input:checked + .slider:before {
 }
 
 .property-key {
-  color: #888;
+  color: var(--ink-muted);
   font-weight: 500;
   min-width: 90px;
 }
 
 .property-value {
-  color: #333;
+  color: var(--ink);
   flex: 1;
 }
 
 .summary-text {
   line-height: 1.6;
-  color: #444;
-  font-size: 12px;
+  color: var(--ink-muted);
+  font-size: var(--fs-label);
 }
 
 .labels-list {
@@ -1172,11 +1173,11 @@ input:checked + .slider:before {
 .label-tag {
   display: inline-block;
   padding: 4px 12px;
-  background: #F5F5F5;
-  border: 1px solid #E0E0E0;
-  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
   font-size: 11px;
-  color: #555;
+  color: var(--ink-muted);
 }
 
 .episodes-list {
@@ -1188,24 +1189,24 @@ input:checked + .slider:before {
 .episode-tag {
   display: inline-block;
   padding: 6px 10px;
-  background: #F8F8F8;
-  border: 1px solid #E8E8E8;
-  border-radius: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
   font-size: 10px;
-  color: #666;
+  color: var(--ink-muted);
   word-break: break-all;
 }
 
 /* Edge relation header */
 .edge-relation-header {
-  background: #F8F8F8;
+  background: var(--surface-2);
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-bottom: 16px;
-  font-size: 13px;
+  font-size: var(--fs-body);
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
   line-height: 1.5;
   word-break: break-word;
 }
@@ -1216,16 +1217,16 @@ input:checked + .slider:before {
   bottom: 160px; /* Moved up from 80px */
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(35, 47, 62, 0.9);
   backdrop-filter: blur(8px);
-  color: #fff;
+  color: var(--nav-ink);
   padding: 10px 20px;
-  border-radius: 30px;
-  font-size: 13px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-body);
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-elevated);
   border: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -1242,17 +1243,17 @@ input:checked + .slider:before {
 .memory-icon {
   width: 18px;
   height: 18px;
-  color: #4CAF50;
+  color: var(--status-running);
 }
 
 @keyframes breathe {
-  0%, 100% { opacity: 0.7; transform: scale(1); filter: drop-shadow(0 0 2px rgba(76, 175, 80, 0.3)); }
-  50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6)); }
+  0%, 100% { opacity: 0.7; transform: scale(1); filter: drop-shadow(0 0 2px rgba(29, 131, 72, 0.3)); }
+  50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(29, 131, 72, 0.6)); }
 }
 
 /* 模拟结束后的提示样式 */
 .graph-building-hint.finished-hint {
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(35, 47, 62, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1265,7 +1266,7 @@ input:checked + .slider:before {
 .finished-hint .hint-icon {
   width: 18px;
   height: 18px;
-  color: #FFF;
+  color: var(--nav-ink);
 }
 
 .finished-hint .hint-text {
@@ -1283,8 +1284,8 @@ input:checked + .slider:before {
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  color: #FFF;
-  transition: all 0.2s;
+  color: var(--nav-ink);
+  transition: all var(--motion-base);
   margin-left: 8px;
   flex-shrink: 0;
 }
@@ -1298,8 +1299,8 @@ input:checked + .slider:before {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #E0E0E0;
-  border-top-color: #7B2D8E;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 16px;
@@ -1310,17 +1311,17 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
-  border: 1px solid #C8E6C9;
+  background: var(--status-running-bg);
+  border: 1px solid rgba(29, 131, 72, 0.3);
 }
 
 .self-loop-count {
   margin-left: auto;
   font-size: 11px;
-  color: #666;
+  color: var(--ink-muted);
   background: rgba(255,255,255,0.8);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-pill);
 }
 
 .self-loop-list {
@@ -1330,9 +1331,9 @@ input:checked + .slider:before {
 }
 
 .self-loop-item {
-  background: #FAFAFA;
-  border: 1px solid #EAEAEA;
-  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
 }
 
 .self-loop-item-header {
@@ -1340,32 +1341,32 @@ input:checked + .slider:before {
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: #F5F5F5;
+  background: var(--surface-2);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background var(--motion-base);
 }
 
 .self-loop-item-header:hover {
-  background: #EEEEEE;
+  background: var(--border-subtle);
 }
 
 .self-loop-item.expanded .self-loop-item-header {
-  background: #E8E8E8;
+  background: var(--border);
 }
 
 .self-loop-index {
   font-size: 10px;
   font-weight: 600;
-  color: #888;
-  background: #E0E0E0;
+  color: var(--ink-muted);
+  background: var(--border);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
 }
 
 .self-loop-name {
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 500;
-  color: #333;
+  color: var(--ink);
   flex: 1;
 }
 
@@ -1377,20 +1378,20 @@ input:checked + .slider:before {
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
-  color: #888;
-  background: #E0E0E0;
-  border-radius: 4px;
-  transition: all 0.2s;
+  color: var(--ink-muted);
+  background: var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--motion-base);
 }
 
 .self-loop-item.expanded .self-loop-toggle {
-  background: #D0D0D0;
-  color: #666;
+  background: var(--ink-subdued);
+  color: var(--surface-1);
 }
 
 .self-loop-item-content {
   padding: 12px;
-  border-top: 1px solid #EAEAEA;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .self-loop-item-content .detail-row {

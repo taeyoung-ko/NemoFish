@@ -275,7 +275,8 @@ watch(() => props.systemLogs.length, () => {
 <style scoped>
 .workbench-panel {
   height: 100%;
-  background-color: #FAFAFA;
+  background-color: var(--canvas-subdued);
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -292,18 +293,18 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .step-card {
-  background: #FFF;
-  border-radius: 8px;
+  background: var(--surface-1);
+  border-radius: var(--radius-md);
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  border: 1px solid #EAEAEA;
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  transition: border-color var(--motion-base) var(--motion-easing);
   position: relative; /* For absolute overlay */
 }
 
 .step-card.active {
-  border-color: #FF5722;
-  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.08);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-card);
 }
 
 .card-header {
@@ -320,46 +321,47 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .step-num {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 20px;
   font-weight: 700;
-  color: #E0E0E0;
+  color: var(--border);
 }
 
 .step-card.active .step-num,
 .step-card.completed .step-num {
-  color: #000;
+  color: var(--ink);
 }
 
 .step-title {
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.5px;
+  color: var(--ink);
 }
 
 .badge {
-  font-size: 10px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
   text-transform: uppercase;
 }
 
-.badge.success { background: #E8F5E9; color: #2E7D32; }
-.badge.processing { background: #FF5722; color: #FFF; }
-.badge.accent { background: #FF5722; color: #FFF; }
-.badge.pending { background: #F5F5F5; color: #999; }
+.badge.success { background: var(--status-running-bg); color: var(--status-running); }
+.badge.processing { background: var(--status-provisioning-bg); color: var(--status-provisioning); }
+.badge.accent { background: var(--status-provisioning-bg); color: var(--status-provisioning); }
+.badge.pending { background: var(--surface-2); color: var(--ink-subdued); }
 
 .api-note {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: #999;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-subdued);
   margin-bottom: 8px;
 }
 
 .description {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
   line-height: 1.5;
   margin-bottom: 16px;
 }
@@ -367,7 +369,7 @@ watch(() => props.systemLogs.length, () => {
 /* Step 01 Tags */
 .tags-container {
   margin-top: 12px;
-  transition: opacity 0.3s;
+  transition: opacity var(--motion-base);
 }
 
 .tags-container.dimmed {
@@ -377,10 +379,10 @@ watch(() => props.systemLogs.length, () => {
 
 .tag-label {
   display: block;
-  font-size: 10px;
-  color: #AAA;
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .tags-list {
@@ -390,14 +392,14 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .entity-tag {
-  background: #F5F5F5;
-  border: 1px solid #EEE;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   font-size: 11px;
-  color: #333;
-  font-family: 'JetBrains Mono', monospace;
-  transition: all 0.2s;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  transition: all var(--motion-fast);
 }
 
 .entity-tag.clickable {
@@ -405,8 +407,8 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .entity-tag.clickable:hover {
-    background: #E0E0E0;
-    border-color: #CCC;
+    background: var(--border);
+    border-color: var(--ink-subdued);
 }
 
 /* Ontology Detail Overlay */
@@ -419,13 +421,13 @@ watch(() => props.systemLogs.length, () => {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(4px);
     z-index: 10;
-    border: 1px solid #EAEAEA;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-elevated);
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: fadeIn 0.2s ease-out;
+    animation: fadeIn var(--motion-base) ease-out;
 }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -435,8 +437,8 @@ watch(() => props.systemLogs.length, () => {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    border-bottom: 1px solid #EAEAEA;
-    background: #FAFAFA;
+    border-bottom: 1px solid var(--border);
+    background: var(--canvas-subdued);
 }
 
 .detail-title-group {
@@ -446,32 +448,33 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .detail-type-badge {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
-    color: #FFF;
-    background: #000;
+    color: var(--on-primary);
+    background: var(--ink);
     padding: 2px 6px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     text-transform: uppercase;
 }
 
 .detail-name {
     font-size: 14px;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
+    color: var(--ink);
 }
 
 .close-btn {
     background: none;
     border: none;
     font-size: 18px;
-    color: #999;
+    color: var(--ink-subdued);
     cursor: pointer;
     line-height: 1;
 }
 
 .close-btn:hover {
-    color: #333;
+    color: var(--ink);
 }
 
 .detail-body {
@@ -481,12 +484,12 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .detail-desc {
-    font-size: 12px;
-    color: #444;
+    font-size: var(--fs-label);
+    color: var(--ink-muted);
     line-height: 1.5;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px dashed #EAEAEA;
+    border-bottom: 1px dashed var(--border-subtle);
 }
 
 .detail-section {
@@ -495,9 +498,9 @@ watch(() => props.systemLogs.length, () => {
 
 .section-label {
     display: block;
-    font-size: 10px;
-    font-weight: 600;
-    color: #AAA;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    color: var(--ink-muted);
     margin-bottom: 8px;
 }
 
@@ -514,23 +517,23 @@ watch(() => props.systemLogs.length, () => {
     gap: 6px;
     align-items: baseline;
     padding: 4px;
-    background: #F9F9F9;
-    border-radius: 4px;
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
 }
 
 .attr-name {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-weight: 600;
-    color: #000;
+    color: var(--ink);
 }
 
 .attr-type {
-    color: #999;
+    color: var(--ink-subdued);
     font-size: 10px;
 }
 
 .attr-desc {
-    color: #555;
+    color: var(--ink-muted);
     flex: 1;
     min-width: 150px;
 }
@@ -543,11 +546,11 @@ watch(() => props.systemLogs.length, () => {
 
 .example-tag {
     font-size: 11px;
-    background: #FFF;
-    border: 1px solid #E0E0E0;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
     padding: 3px 8px;
-    border-radius: 12px;
-    color: #555;
+    border-radius: var(--radius-pill);
+    color: var(--ink-muted);
 }
 
 .conn-item {
@@ -556,18 +559,18 @@ watch(() => props.systemLogs.length, () => {
     gap: 8px;
     font-size: 11px;
     padding: 6px;
-    background: #F5F5F5;
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
 }
 
 .conn-node {
     font-weight: 600;
-    color: #333;
+    color: var(--ink);
 }
 
 .conn-arrow {
-    color: #BBB;
+    color: var(--ink-subdued);
 }
 
 /* Step 02 Stats */
@@ -575,9 +578,9 @@ watch(() => props.systemLogs.length, () => {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
-  background: #F9F9F9;
+  background: var(--surface-2);
   padding: 16px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 .stat-card {
@@ -586,15 +589,16 @@ watch(() => props.systemLogs.length, () => {
 
 .stat-value {
   display: block;
-  font-size: 20px;
+  font-size: var(--fs-display);
   font-weight: 700;
-  color: #000;
-  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink);
+  font-family: var(--font-mono);
 }
 
 .stat-label {
-  font-size: 9px;
-  color: #999;
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-weight: 600;
   text-transform: uppercase;
   margin-top: 4px;
   display: block;
@@ -603,23 +607,24 @@ watch(() => props.systemLogs.length, () => {
 /* Step 03 Button */
 .action-btn {
   width: 100%;
-  background: #000;
-  color: #FFF;
+  background: var(--primary);
+  color: var(--on-primary);
   border: none;
   padding: 14px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-label);
+  font-weight: 700;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: background-color var(--motion-fast);
 }
 
 .action-btn:hover:not(:disabled) {
-  opacity: 0.8;
+  background: var(--primary-hover);
 }
 
 .action-btn:disabled {
-  background: #CCC;
+  background: var(--border);
+  color: var(--ink-subdued);
   cursor: not-allowed;
 }
 
@@ -627,40 +632,46 @@ watch(() => props.systemLogs.length, () => {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
-  color: #FF5722;
+  font-size: var(--fs-label);
+  color: var(--status-provisioning);
   margin-bottom: 12px;
 }
 
 .spinner-sm {
   width: 14px;
   height: 14px;
-  border: 2px solid #FFCCBC;
-  border-top-color: #FF5722;
+  border: 2px solid var(--border);
+  border-top-color: var(--ink-muted);
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.action-btn .spinner-sm {
+  border-color: rgba(255, 255, 255, 0.4);
+  border-top-color: var(--on-primary);
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* System Logs */
 .system-logs {
-  background: #000;
-  color: #DDD;
+  background: var(--nav-bg);
+  color: var(--nav-ink);
   padding: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  border-top: 1px solid #222;
+  font-family: var(--font-mono);
+  border-top: 1px solid var(--nav-bg-2);
   flex-shrink: 0;
 }
 
 .log-header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--nav-bg-2);
   padding-bottom: 8px;
   margin-bottom: 8px;
-  font-size: 10px;
-  color: #888;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--nav-ink-inactive);
 }
 
 .log-content {
@@ -677,8 +688,8 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .log-content::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 2px;
+  background: var(--nav-bg-2);
+  border-radius: var(--radius-sm);
 }
 
 .log-line {
@@ -689,12 +700,12 @@ watch(() => props.systemLogs.length, () => {
 }
 
 .log-time {
-  color: #666;
+  color: var(--nav-ink-inactive);
   min-width: 75px;
 }
 
 .log-msg {
-  color: #CCC;
+  color: var(--nav-ink);
   word-break: break-all;
 }
 </style>

@@ -634,22 +634,22 @@ onUnmounted(() => {
   justify-content: center;
   gap: 24px;
   margin-bottom: 24px;
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-family: var(--font-sans);
   padding: 0 40px;
 }
 
 .section-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
   max-width: 300px;
 }
 
 .section-title {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #9CA3AF;
-  letter-spacing: 3px;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  color: var(--ink-muted);
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
@@ -668,18 +668,18 @@ onUnmounted(() => {
 .project-card {
   position: absolute;
   width: 280px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 0;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   padding: 14px;
   cursor: pointer;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
   transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 700ms cubic-bezier(0.23, 1, 0.32, 1), opacity 700ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .project-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-elevated);
+  border-color: var(--link);
   z-index: 1000 !important;
 }
 
@@ -694,13 +694,13 @@ onUnmounted(() => {
   align-items: center;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #F3F4F6;
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
   font-size: 0.7rem;
 }
 
 .card-id {
-  color: #6B7280;
+  color: var(--ink-muted);
   letter-spacing: 0.5px;
   font-weight: 500;
 }
@@ -723,12 +723,12 @@ onUnmounted(() => {
 }
 
 /* 不同功能的颜色 */
-.status-icon:nth-child(1).available { color: #3B82F6; } /* 图谱构建 - 蓝色 */
-.status-icon:nth-child(2).available { color: #F59E0B; } /* 环境搭建 - 橙色 */
-.status-icon:nth-child(3).available { color: #10B981; } /* 分析报告 - 绿色 */
+.status-icon:nth-child(1).available { color: var(--status-provisioning); } /* 图谱构建 - 蓝色 */
+.status-icon:nth-child(2).available { color: var(--status-pending); } /* 环境搭建 - 橙色 */
+.status-icon:nth-child(3).available { color: var(--status-running); } /* 分析报告 - 绿色 */
 
 .status-icon.unavailable {
-  color: #D1D5DB;
+  color: var(--ink-subdued);
   opacity: 0.5;
 }
 
@@ -747,10 +747,13 @@ onUnmounted(() => {
 }
 
 /* 进度状态颜色 */
-.card-progress.completed { color: #10B981; }    /* 已完成 - 绿色 */
-.card-progress.in-progress { color: #F59E0B; }  /* 进行中 - 橙色 */
-.card-progress.not-started { color: #9CA3AF; }  /* 未开始 - 灰色 */
-.card-status.pending { color: #9CA3AF; }
+.card-progress {
+  font-family: var(--font-sans);
+}
+.card-progress.completed { color: var(--status-running); }    /* 已完成 - 绿色 */
+.card-progress.in-progress { color: var(--status-pending); }  /* 进行中 - 橙色 */
+.card-progress.not-started { color: var(--ink-subdued); }  /* 未开始 - 灰色 */
+.card-status.pending { color: var(--ink-subdued); }
 
 /* 文件列表区域 */
 .card-files-wrapper {
@@ -760,9 +763,9 @@ onUnmounted(() => {
   max-height: 110px;
   margin-bottom: 12px;
   padding: 8px 10px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
-  border-radius: 4px;
-  border: 1px solid #e8eaed;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
   overflow: hidden;
 }
 
@@ -778,11 +781,11 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 3px 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.6rem;
-  color: #6B7280;
+  color: var(--ink-muted);
   background: rgba(255, 255, 255, 0.5);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   letter-spacing: 0.3px;
 }
 
@@ -792,27 +795,27 @@ onUnmounted(() => {
   gap: 8px;
   padding: 4px 6px;
   background: rgba(255, 255, 255, 0.7);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s ease;
 }
 
 .file-item:hover {
   background: rgba(255, 255, 255, 1);
   transform: translateX(2px);
-  border-color: #e5e7eb;
+  border-color: var(--border);
 }
 
-/* 简约文件标签样式 */
+/* 简约文件标签样式 - 상태 뱃지 패턴(틴트 배경 + 진한 텍스트) */
 .file-tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 16px;
   padding: 0 4px;
-  border-radius: 2px;
-  font-family: 'JetBrains Mono', monospace;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
   font-size: 0.55rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   text-transform: uppercase;
   letter-spacing: 0.2px;
@@ -820,21 +823,21 @@ onUnmounted(() => {
   min-width: 28px;
 }
 
-/* 低饱和度配色方案 - Morandi色系 */
-.file-tag.pdf { background: #f2e6e6; color: #a65a5a; }
-.file-tag.doc { background: #e6eff5; color: #5a7ea6; }
-.file-tag.xls { background: #e6f2e8; color: #5aa668; }
-.file-tag.ppt { background: #f5efe6; color: #a6815a; }
-.file-tag.txt { background: #f0f0f0; color: #757575; }
-.file-tag.code { background: #eae6f2; color: #815aa6; }
-.file-tag.img { background: #e6f2f2; color: #5aa6a6; }
-.file-tag.zip { background: #f2f0e6; color: #a69b5a; }
-.file-tag.other { background: #f3f4f6; color: #6b7280; }
+/* AWS 절제된 팔레트로 평탄화: 상태색 재사용 + 나머지는 뉴트럴 회색 */
+.file-tag.pdf { background: var(--status-stopped-bg); color: var(--status-stopped); }
+.file-tag.doc { background: var(--status-provisioning-bg); color: var(--status-provisioning); }
+.file-tag.xls { background: var(--status-running-bg); color: var(--status-running); }
+.file-tag.ppt { background: var(--status-pending-bg); color: var(--status-pending); }
+.file-tag.txt { background: var(--surface-2); color: var(--ink-muted); }
+.file-tag.code { background: var(--surface-2); color: var(--link); }
+.file-tag.img { background: var(--surface-2); color: var(--ink-muted); }
+.file-tag.zip { background: var(--surface-2); color: var(--ink-muted); }
+.file-tag.other { background: var(--surface-2); color: var(--ink-muted); }
 
 .file-name {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: #4b5563;
+  color: var(--ink-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -848,7 +851,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 8px;
   height: 48px;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
 }
 
 .empty-file-icon {
@@ -857,15 +860,15 @@ onUnmounted(() => {
 }
 
 .empty-file-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   letter-spacing: 0.5px;
 }
 
 /* 悬停时文件区域效果 */
 .project-card:hover .card-files-wrapper {
-  border-color: #d1d5db;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-color: var(--border);
+  background: var(--surface-1);
 }
 
 /* 角落装饰 */
@@ -875,18 +878,18 @@ onUnmounted(() => {
   left: 6px;
   width: 8px;
   height: 8px;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.4);
-  border-left: 1.5px solid rgba(0, 0, 0, 0.4);
+  border-top: 1.5px solid var(--ink-subdued);
+  border-left: 1.5px solid var(--ink-subdued);
   pointer-events: none;
   z-index: 10;
 }
 
 /* 卡片标题 */
 .card-title {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.9rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--ink);
   margin: 0 0 6px 0;
   line-height: 1.4;
   white-space: nowrap;
@@ -896,14 +899,14 @@ onUnmounted(() => {
 }
 
 .project-card:hover .card-title {
-  color: #2563EB;
+  color: var(--link);
 }
 
 /* 卡片描述 */
 .card-desc {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
-  color: #6B7280;
+  color: var(--ink-muted);
   margin: 0 0 16px 0;
   line-height: 1.5;
   height: 34px;
@@ -920,10 +923,10 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #F3F4F6;
-  font-family: 'JetBrains Mono', monospace;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   font-weight: 500;
 }
 
@@ -949,18 +952,18 @@ onUnmounted(() => {
 }
 
 /* 进度状态颜色 - 底部 */
-.card-footer .card-progress.completed { color: #10B981; }
-.card-footer .card-progress.in-progress { color: #F59E0B; }
-.card-footer .card-progress.not-started { color: #9CA3AF; }
+.card-footer .card-progress.completed { color: var(--status-running); }
+.card-footer .card-progress.in-progress { color: var(--status-pending); }
+.card-footer .card-progress.not-started { color: var(--ink-subdued); }
 
-/* 底部装饰线 */
+/* 底部装饰线 - 오렌지 액센트로 hover 강조 */
 .card-bottom-line {
   position: absolute;
   bottom: 0;
   left: 0;
   height: 2px;
   width: 0;
-  background-color: #000;
+  background-color: var(--primary);
   transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 20;
 }
@@ -976,7 +979,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 14px;
   padding: 48px;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
+  font-family: var(--font-sans);
 }
 
 .empty-icon {
@@ -987,8 +991,8 @@ onUnmounted(() => {
 .loading-spinner {
   width: 24px;
   height: 24px;
-  border: 2px solid #E5E7EB;
-  border-top-color: #6B7280;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -1029,14 +1033,14 @@ onUnmounted(() => {
 }
 
 .modal-content {
-  background: #FFFFFF;
+  background: var(--surface-1);
   width: 560px;
   max-width: 90vw;
   max-height: 85vh;
   overflow-y: auto;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-modal);
 }
 
 /* 动画过渡 */
@@ -1074,8 +1078,8 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
-  border-bottom: 1px solid #F3F4F6;
-  background: #FFFFFF;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-1);
 }
 
 .modal-title-section {
@@ -1085,10 +1089,10 @@ onUnmounted(() => {
 }
 
 .modal-id {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--ink);
   letter-spacing: 0.5px;
 }
 
@@ -1096,22 +1100,22 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 4px 8px;
-  border-radius: 4px;
-  background: #F9FAFB;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
 }
 
-.modal-progress.completed { color: #10B981; background: rgba(16, 185, 129, 0.1); }
-.modal-progress.in-progress { color: #F59E0B; background: rgba(245, 158, 11, 0.1); }
-.modal-progress.not-started { color: #9CA3AF; background: #F3F4F6; }
+.modal-progress.completed { color: var(--status-running); background: var(--status-running-bg); }
+.modal-progress.in-progress { color: var(--status-pending); background: var(--status-pending-bg); }
+.modal-progress.not-started { color: var(--ink-subdued); background: var(--surface-2); }
 
 .modal-create-time {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   letter-spacing: 0.3px;
 }
 
@@ -1121,18 +1125,18 @@ onUnmounted(() => {
   border: none;
   background: transparent;
   font-size: 1.5rem;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 .modal-close:hover {
-  background: #F3F4F6;
-  color: #111827;
+  background: var(--surface-2);
+  color: var(--ink);
 }
 
 /* 弹窗内容 */
@@ -1149,23 +1153,23 @@ onUnmounted(() => {
 }
 
 .modal-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  color: #6B7280;
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  color: var(--ink-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 10px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .modal-requirement {
-  font-size: 0.95rem;
-  color: #374151;
+  font-size: var(--fs-body);
+  color: var(--ink);
   line-height: 1.6;
   padding: 16px;
-  background: #F9FAFB;
-  border: 1px solid #F3F4F6;
-  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
 }
 
 .modal-files {
@@ -1183,17 +1187,17 @@ onUnmounted(() => {
 }
 
 .modal-files::-webkit-scrollbar-track {
-  background: #F3F4F6;
-  border-radius: 2px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
 }
 
 .modal-files::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
-  border-radius: 2px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .modal-files::-webkit-scrollbar-thumb:hover {
-  background: #9CA3AF;
+  background: var(--ink-subdued);
 }
 
 .modal-file-item {
@@ -1201,20 +1205,21 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 6px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 
 .modal-file-item:hover {
-  border-color: #D1D5DB;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-color: var(--ink-subdued);
+  box-shadow: var(--shadow-card);
 }
 
 .modal-file-name {
-  font-size: 0.85rem;
-  color: #4B5563;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  color: var(--ink-muted);
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1222,12 +1227,13 @@ onUnmounted(() => {
 }
 
 .modal-empty {
-  font-size: 0.85rem;
-  color: #9CA3AF;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  color: var(--ink-subdued);
   padding: 16px;
-  background: #F9FAFB;
-  border: 1px dashed #E5E7EB;
-  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
   text-align: center;
 }
 
@@ -1237,19 +1243,19 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   padding: 10px 32px 0;
-  background: #FFFFFF;
+  background: var(--surface-1);
 }
 
 .divider-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #E5E7EB, transparent);
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
 }
 
 .divider-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   letter-spacing: 2px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1260,7 +1266,7 @@ onUnmounted(() => {
   display: flex;
   gap: 16px;
   padding: 20px 32px;
-  background: #FFFFFF;
+  background: var(--surface-1);
 }
 
 .modal-btn {
@@ -1270,9 +1276,9 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 16px;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -1280,22 +1286,22 @@ onUnmounted(() => {
 }
 
 .modal-btn:hover:not(:disabled) {
-  border-color: #000000;
+  border-color: var(--link);
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-card);
 }
 
 .modal-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: #F9FAFB;
+  background: var(--surface-2);
 }
 
 .btn-step {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.6rem;
   font-weight: 500;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -1307,19 +1313,19 @@ onUnmounted(() => {
 }
 
 .btn-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  color: #4B5563;
+  color: var(--ink-muted);
 }
 
-.modal-btn.btn-project .btn-icon { color: #3B82F6; }
-.modal-btn.btn-simulation .btn-icon { color: #F59E0B; }
-.modal-btn.btn-report .btn-icon { color: #10B981; }
+.modal-btn.btn-project .btn-icon { color: var(--status-provisioning); }
+.modal-btn.btn-simulation .btn-icon { color: var(--status-pending); }
+.modal-btn.btn-report .btn-icon { color: var(--status-running); }
 
 .modal-btn:hover:not(:disabled) .btn-text {
-  color: #111827;
+  color: var(--ink);
 }
 
 /* 不可回放提示 */
@@ -1328,13 +1334,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 0 32px 20px;
-  background: #FFFFFF;
+  background: var(--surface-1);
 }
 
 .hint-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 0.7rem;
-  color: #9CA3AF;
+  color: var(--ink-subdued);
   letter-spacing: 0.3px;
   text-align: center;
   line-height: 1.5;

@@ -90,8 +90,17 @@ def create_app(config_class=Config):
             ready = False
         return {'llm_ready': ready}
     
+    # Nemotron 퍼소나 사용 시, 전체 풀(100만·~24s 로드)을 백그라운드로 미리 데워둔다.
+    # → 사용자가 Step2 필터 UI에 도달할 즈음엔 이미 로드 완료(첫 호출 멈춤 방지).
+    if os.environ.get("USE_NEMOTRON_PERSONAS", "").strip().lower() in ("1", "true", "yes", "on"):
+        try:
+            from .services.nemotron_loader import warm_pool_async
+            warm_pool_async()
+        except Exception as e:
+            logger.warning(f"Nemotron 풀 워밍 실패(무시): {e}")
+
     if should_log_startup:
         logger.info("MiroFish Backend 启动完成")
-    
+
     return app
 

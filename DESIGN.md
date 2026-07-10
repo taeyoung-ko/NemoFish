@@ -1,186 +1,298 @@
----
-version: alpha
-name: Amazon Web Services
-description: "AWS Orange (#FF9900) accent on a white/light-gray canvas. Functional over beautiful — the console manages 200+ services with information density and wayfinding as design priorities. Dense left navigation, resource tables, and status-coded infrastructure at 13px base type."
-
-colors:
-  primary: "#FF9900"
-  on-primary: "#FFFFFF"
-  primary-hover: "#EC7211"
-  ink: "#16191F"
-  ink-muted: "#545B64"
-  ink-subdued: "#879596"
-  canvas: "#FFFFFF"
-  canvas-subdued: "#F2F3F3"
-  surface-1: "#FFFFFF"
-  surface-2: "#F2F3F3"
-  border: "#D5DBDB"
-  border-subtle: "#EAEDED"
-  nav-background: "#232F3E"
-  nav-active: "#FF9900"
-  status-running: "#1D8348"
-  status-stopped: "#E74C3C"
-  status-pending: "#F39C12"
-  status-provisioning: "#3498DB"
-  link: "#0073BB"
-  link-hover: "#005276"
-
-typography:
-  display:
-    fontFamily: "Amazon Ember, Helvetica Neue, Arial, sans-serif"
-    fontSize: 24px
-    fontWeight: 700
-    lineHeight: 1.3
-    letterSpacing: -0.01em
-  body:
-    fontFamily: "Amazon Ember, Helvetica Neue, Arial, sans-serif"
-    fontSize: 13px
-    fontWeight: 400
-    lineHeight: 1.5
-    letterSpacing: 0em
-
-spacing:
-  base: 4px
-  scale: [4, 8, 12, 16, 20, 24, 32, 40, 48, 64]
-
-radius:
-  sm: 2px
-  md: 4px
-  lg: 4px
-  pill: 9999px
-
-shadows:
-  card: "0 1px 4px rgba(0,0,0,0.1)"
-  elevated: "0 4px 12px rgba(0,0,0,0.12)"
-  modal: "0 8px 40px rgba(0,0,0,0.2)"
-
-motion:
-  duration-fast: 100ms
-  duration-base: 150ms
-  easing: cubic-bezier(0.2, 0, 0, 1)
----
-
-## Rationale
-
-**200 services, one interface** — The AWS Management Console is one of the most complex web applications ever shipped. EC2, S3, RDS, Lambda, CloudFormation, IAM, CloudFront, and hundreds more services each have their own dashboard, their own resource tables, and their own workflows — all accessible from a single console. The design mandate is wayfinding at industrial scale. AWS Orange (#FF9900) is the consistent brand signal; the rest of the UI is engineered to disappear.
-
-**Functional over beautiful as a deliberate position** — AWS made a conscious decision early in its product life that the console's audience — developers, infrastructure engineers, DevOps teams — is optimized for information over aesthetics. Dense tables, small type (13px base), and no decorative elements are not failures of design investment but intentional optimizations. An engineer scanning 500 EC2 instances for a stopped instance in the wrong region does not need visual delight. They need reliable status colors and sortable columns.
-
-**Orange as trust through continuity** — Amazon's heritage orange carries enormous brand equity for a specific audience: engineers who have used AWS since its launch. The orange never dominates the interface; it accents — primary button fills, active navigation items, the AWS logo mark. Its restraint prevents the orange from feeling cheap or alarming (which warm colors can, in dense technical UIs) while maintaining the brand thread across 200 service consoles.
-
-**The nav is the product** — Because the service surface is so large, the left navigation is itself a primary user interface, not a frame for one. AWS Console's global navigation groups services into categories (Compute, Storage, Database, Networking, Security, etc.) with collapsible sections. Users spend as much cognitive energy navigating between services as using them. Search, pinned favorites, and recently visited services are first-class features of the nav, not afterthoughts.
+# Design System Inspired by Lovable
 
 ## 1. Visual Theme & Atmosphere
-The AWS console presents as clean government-infrastructure aesthetic: white surfaces, light gray backgrounds, dark navy navigation, and orange accents. There is no warmth, no personality injection, no playful illustration. The visual environment says: this is serious infrastructure management. Treat it accordingly.
 
-The top navigation bar is dark navy (#232F3E), carrying the AWS logo, the account/region selector, and global search. Below it, individual service consoles own their left navigation sidebar (also dark, 220px wide) and a white main content area. The dark-nav / white-content split creates an immediate spatial hierarchy: the nav is the frame, the content is the work.
+Lovable's website radiates warmth through restraint. The entire page sits on a creamy, parchment-toned background (`#f7f4ed`) that immediately separates it from the cold-white conventions of most developer tool sites. This isn't minimalism for minimalism's sake — it's a deliberate choice to feel approachable, almost analog, like a well-crafted notebook. The near-black text (`#1c1c1c`) against this warm cream creates a contrast ratio that's easy on the eyes while maintaining sharp readability.
 
-## 2. Color System
-**Canvas**:
-- Page background: #F2F3F3 — very light gray, keeps the overall console from feeling stark
-- Content surface: #FFFFFF — all cards, tables, and panels
-- Border: #D5DBDB — defines sections and table rows
-- Subtle border: #EAEDED — internal dividers within sections
+The custom Camera Plain Variable typeface is the system's secret weapon. Unlike geometric sans-serifs that signal "tech company," Camera Plain has a humanist warmth — slightly rounded terminals, organic curves, and a comfortable reading rhythm. At display sizes (48px–60px), weight 600 with aggressive negative letter-spacing (-0.9px to -1.5px) compresses headlines into confident, editorial statements. The font uses `ui-sans-serif, system-ui` as fallbacks, acknowledging that the custom typeface carries the brand personality.
 
-**Navigation**:
-- Global nav / sidebar: #232F3E — deep navy, consistent across all service consoles
-- Active nav item: orange left border (#FF9900) or highlighted background
-- Nav text: #FFFFFF (primary), #8D9699 (inactive)
+What makes Lovable's visual system distinctive is its opacity-driven depth model. Rather than using a traditional gray scale, the system modulates `#1c1c1c` at varying opacities (0.03, 0.04, 0.4, 0.82–0.83) to create a unified tonal range. Every shade of gray on the page is technically the same hue — just more or less transparent. This creates a visual coherence that's nearly impossible to achieve with arbitrary hex values. The border system follows suit: `1px solid #eceae4` for light divisions and `1px solid rgba(28, 28, 28, 0.4)` for stronger interactive boundaries.
 
-**Primary accent**:
-- AWS Orange: #FF9900 — primary buttons, active states, visual accents
-- Hover: #EC7211 — darker amber on interaction
+**Key Characteristics:**
+- Warm parchment background (`#f7f4ed`) — not white, not beige, a deliberate cream that feels hand-selected
+- Camera Plain Variable typeface with humanist warmth and editorial letter-spacing at display sizes
+- Opacity-driven color system: all grays derived from `#1c1c1c` at varying transparency levels
+- Inset shadow technique on buttons: `rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset`
+- Warm neutral border palette: `#eceae4` for subtle, `rgba(28,28,28,0.4)` for interactive elements
+- Full-pill radius (`9999px`) used extensively for action buttons and icon containers
+- Focus state uses `rgba(0,0,0,0.1) 0px 4px 12px` shadow for soft, warm emphasis
+- shadcn/ui + Radix UI component primitives with Tailwind CSS utility styling
 
-**Text**:
-- Default: #16191F — near-black, high contrast on white
-- Muted: #545B64 — secondary labels, help text, column headers
-- Subdued: #879596 — tertiary metadata, timestamps
+## 2. Color Palette & Roles
 
-**Links**:
-- #0073BB — standard blue for hyperlinks (resource ARNs, service names)
-- Hover: #005276 — deep blue
+### Primary
+- **Cream** (`#f7f4ed`): Page background, card surfaces, button surfaces. The foundation — warm, paper-like, human.
+- **Charcoal** (`#1c1c1c`): Primary text, headings, dark button backgrounds. Not pure black — organic warmth.
+- **Off-White** (`#fcfbf8`): Button text on dark backgrounds, subtle highlight. Barely distinguishable from pure white.
 
-**Infrastructure status** (critical for EC2, RDS, ECS workflows):
-- Running / Active: #1D8348 green
-- Stopped / Terminated: #E74C3C red
-- Pending / Initializing: #F39C12 amber
-- Provisioning / Creating: #3498DB blue
+### Neutral Scale (Opacity-Based)
+- **Charcoal 100%** (`#1c1c1c`): Primary text, headings, dark surfaces.
+- **Charcoal 83%** (`rgba(28,28,28,0.83)`): Strong secondary text.
+- **Charcoal 82%** (`rgba(28,28,28,0.82)`): Body copy.
+- **Muted Gray** (`#5f5f5d`): Secondary text, descriptions, captions.
+- **Charcoal 40%** (`rgba(28,28,28,0.4)`): Interactive borders, button outlines.
+- **Charcoal 4%** (`rgba(28,28,28,0.04)`): Subtle hover backgrounds, micro-tints.
+- **Charcoal 3%** (`rgba(28,28,28,0.03)`): Barely-visible overlays, background depth.
 
-## 3. Typography
-Amazon Ember (licensed for AWS use) is a clean humanist grotesque. At 13px body — smaller than most modern web applications — it prioritizes density over comfort. This is intentional: an EC2 instances table might show 50 rows with 8 columns on a standard monitor, and every pixel of font size removed allows more rows and columns to be visible without scrolling.
+### Surface & Border
+- **Light Cream** (`#eceae4`): Card borders, dividers, image outlines. The warm divider line.
+- **Cream Surface** (`#f7f4ed`): Card backgrounds, section fills — same as page background for seamless integration.
 
-Table column headers: 12px, weight 700, subdued ink (#545B64). Table cell values: 13px, weight 400. Resource identifiers (instance IDs, bucket names) use 13px monospace — AWS uses a monospace override for any machine-generated identifier to aid visual scanning and copy accuracy.
+### Interactive
+- **Ring Blue** (`#3b82f6` at 50% opacity): `--tw-ring-color`, Tailwind focus ring.
+- **Focus Shadow** (`rgba(0,0,0,0.1) 0px 4px 12px`): Focus and active state shadow — soft, warm, diffused.
 
-Heading scale within service dashboards: 20px for the page title (e.g., "EC2 Instances"), 16px for section headers within a page (e.g., "Instance Details"), 13px 600-weight for subsection labels.
+### Inset Shadows
+- **Button Inset** (`rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px`): The signature multi-layer inset shadow on dark buttons.
 
-## 4. Components & Patterns
-**Resource table** (the primary pattern of the entire console):
-- Fixed or auto-width columns; sortable headers with directional triangles
-- Row-level checkbox (leftmost) for bulk actions
-- Inline status badge (Running / Stopped / Pending / Provisioning) using semantic color tokens
-- Row action dropdown on the right ("Instance State", "Connect", "Modify") 
-- Filtering by tag, state, or custom filter above the table
-- Column picker (right side) to show/hide columns
+## 3. Typography Rules
 
-**Left navigation sidebar**:
-- Service-specific, 220px wide, dark background
-- Collapsible sections ("Instances", "Images", "Network & Security", etc.)
-- Active page item: orange left border + slightly lighter background
-- Count badges on items (e.g., "Alarms (3)")
+### Font Family
+- **Primary**: `Camera Plain Variable`, with fallbacks: `ui-sans-serif, system-ui`
+- **Weight range**: 400 (body/reading), 480 (special display), 600 (headings/emphasis)
+- **Feature**: Variable font with continuous weight axis — allows fine-tuned intermediary weights like 480.
 
-**Service dashboard card**:
-- White card, 4px border-left in status color for at-a-glance health
-- Title, metric value (large, 24px+), subtitle with trend or comparison
+### Hierarchy
 
-**Breadcrumb navigation**:
-- Service name > Resource type > Resource ID
-- Each segment a blue link except the last (current page, plain text)
+| Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
+|------|------|------|--------|-------------|----------------|-------|
+| Display Hero | Camera Plain Variable | 60px (3.75rem) | 600 | 1.00–1.10 (tight) | -1.5px | Maximum impact, editorial |
+| Display Alt | Camera Plain Variable | 60px (3.75rem) | 480 | 1.00 (tight) | normal | Lighter hero variant |
+| Section Heading | Camera Plain Variable | 48px (3.00rem) | 600 | 1.00 (tight) | -1.2px | Feature section titles |
+| Sub-heading | Camera Plain Variable | 36px (2.25rem) | 600 | 1.10 (tight) | -0.9px | Sub-sections |
+| Card Title | Camera Plain Variable | 20px (1.25rem) | 400 | 1.25 (tight) | normal | Card headings |
+| Body Large | Camera Plain Variable | 18px (1.13rem) | 400 | 1.38 | normal | Introductions |
+| Body | Camera Plain Variable | 16px (1.00rem) | 400 | 1.50 | normal | Standard reading text |
+| Button | Camera Plain Variable | 16px (1.00rem) | 400 | 1.50 | normal | Button labels |
+| Button Small | Camera Plain Variable | 14px (0.88rem) | 400 | 1.50 | normal | Compact buttons |
+| Link | Camera Plain Variable | 16px (1.00rem) | 400 | 1.50 | normal | Underline decoration |
+| Link Small | Camera Plain Variable | 14px (0.88rem) | 400 | 1.50 | normal | Footer links |
+| Caption | Camera Plain Variable | 14px (0.88rem) | 400 | 1.50 | normal | Metadata, small text |
 
-**Wizard / multi-step form** (used for launch workflows):
-- Left sidebar showing step names with completion indicators
-- Each step: full-page form with one or more sections
-- "Next" button (orange primary) + "Previous" button (secondary/ghost)
+### Principles
+- **Warm humanist voice**: Camera Plain Variable gives Lovable its approachable personality. The slightly rounded terminals and organic curves contrast with the sharp geometric sans-serifs used by most developer tools.
+- **Variable weight as design tool**: The font supports continuous weight values (e.g., 480), enabling nuanced hierarchy beyond standard weight stops. Weight 480 at 60px creates a display style that feels lighter than semibold but stronger than regular.
+- **Compression at scale**: Headlines use negative letter-spacing (-0.9px to -1.5px) for editorial impact. Body text stays at normal tracking for comfortable reading.
+- **Two weights, clear roles**: 400 (body/UI/links/buttons) and 600 (headings/emphasis). The narrow weight range creates hierarchy through size and spacing, not weight variation.
 
-**Alert / notification banner**:
-- Top of page, full-width, icon + text + optional action link
-- Success: green left border; Error: red; Warning: amber; Info: blue
+## 4. Component Stylings
 
-## 5. Spacing & Layout
-The console uses a 4px base grid. Main content area padding: 20px horizontal, 20px top. Table row height: 36px (comfortable for scanning with dense data). Between sections on a page: 24px. Between cards in a dashboard: 16px.
+### Buttons
 
-The service navigation sidebar is fixed at 220px. The global top nav is 56px. The main content area is fully fluid — tables expand to available width, which on ultrawide monitors can be 1600px+. AWS does not constrain content width; infrastructure engineers often use very wide screens precisely to see more table columns.
+**Primary Dark (Inset Shadow)**
+- Background: `#1c1c1c`
+- Text: `#fcfbf8`
+- Padding: 8px 16px
+- Radius: 6px
+- Shadow: `rgba(0,0,0,0) 0px 0px 0px 0px, rgba(0,0,0,0) 0px 0px 0px 0px, rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px`
+- Active: opacity 0.8
+- Focus: `rgba(0,0,0,0.1) 0px 4px 12px` shadow
+- Use: Primary CTA ("Start Building", "Get Started")
 
-Form layouts inside wizards use a max-width of 900px to prevent extremely wide input fields that hurt usability.
+**Ghost / Outline**
+- Background: transparent
+- Text: `#1c1c1c`
+- Padding: 8px 16px
+- Radius: 6px
+- Border: `1px solid rgba(28,28,28,0.4)`
+- Active: opacity 0.8
+- Focus: `rgba(0,0,0,0.1) 0px 4px 12px` shadow
+- Use: Secondary actions ("Log In", "Documentation")
 
-## 6. Motion & Interaction
-Motion is minimal and fast. Button clicks produce immediate visual feedback (100ms darkening). Status changes in resource tables use 0-animation (instant update) after API polling returns new state — no fade-in or slide-in to mask the operational nature of the data.
+**Cream Surface**
+- Background: `#f7f4ed`
+- Text: `#1c1c1c`
+- Padding: 8px 16px
+- Radius: 6px
+- No border
+- Active: opacity 0.8
+- Use: Tertiary actions, toolbar buttons
 
-Dropdowns open at 100ms. Modals fade in at 150ms. The console's loading states use a simple orange progress bar across the top of the content area (similar to NProgress patterns) — functional loading indication without a blocking overlay.
+**Pill / Icon Button**
+- Background: `#f7f4ed`
+- Text: `#1c1c1c`
+- Radius: 9999px (full pill)
+- Shadow: same inset pattern as primary dark
+- Opacity: 0.5 (default), 0.8 (active)
+- Use: Additional actions, plan mode toggle, voice recording
 
-Table row selection uses instant highlight at 0ms. Bulk action toolbar slides down from the top of the table at 150ms when rows are selected.
+### Cards & Containers
+- Background: `#f7f4ed` (matches page)
+- Border: `1px solid #eceae4`
+- Radius: 12px (standard), 16px (featured), 8px (compact)
+- No box-shadow by default — borders define boundaries
+- Image cards: `1px solid #eceae4` with 12px radius
 
-## Accessibility
+### Inputs & Forms
+- Background: `#f7f4ed`
+- Text: `#1c1c1c`
+- Border: `1px solid #eceae4`
+- Radius: 6px
+- Focus: ring blue (`rgba(59,130,246,0.5)`) outline
+- Placeholder: `#5f5f5d`
 
-### Contrast Ratios
-- **#16191F on #FFFFFF**: 19.4:1 — passes AAA
-- **#545B64 muted on #FFFFFF**: 6.3:1 — passes AA
-- **#879596 subdued on #FFFFFF**: 4.5:1 — passes AA (borderline)
-- **#FFFFFF on #FF9900 primary button**: 2.8:1 — fails AA for small text; AWS Orange must only be used for buttons with 18px+ or bold 14px+ text
-- **#FFFFFF on nav #232F3E**: 14.8:1 — passes AAA
-- **#FFFFFF on #1D8348 running status**: 5.1:1 — passes AA
-- **#FFFFFF on #E74C3C stopped status**: 4.6:1 — passes AA
+### Navigation
+- Clean horizontal nav on cream background, fixed
+- Logo/wordmark left-aligned (128.75 x 22px)
+- Links: Camera Plain 14–16px weight 400, `#1c1c1c` text
+- CTA: dark button with inset shadow, 6px radius
+- Mobile: hamburger menu with 6px radius button
+- Subtle border or no border on scroll
 
-### Minimum Requirements
-- **Focus indicator**: visible 2px outline; AWS uses orange (#FF9900) focus rings on interactive elements in the dark nav, blue (#0073BB) on white surfaces
-- **Status indication**: all resource states use text label AND color — never color-only
-- **Table accessibility**: proper `<th scope>` on headers; sortable columns marked with aria-sort; selected rows with aria-selected
-- **Form validation**: inline text error messages with aria-describedby; error icon + color + text (never color-only)
+### Links
+- Color: `#1c1c1c`
+- Decoration: underline (default)
+- Hover: primary accent (via CSS variable `hsl(var(--primary))`)
+- No color change on hover — decoration carries the interactive signal
 
-### Motion
-- Respects `prefers-reduced-motion`: yes — progress bar and transition animations disabled
-- Loading indicators fallback to static spinner under reduced-motion
+### Image Treatment
+- Showcase/portfolio images with `1px solid #eceae4` border
+- Consistent 12px border radius on all image containers
+- Soft gradient backgrounds behind hero content (warm multi-color wash)
+- Gallery-style presentation for template/project showcases
 
-### Notes
-- AWS Orange (#FF9900) fails WCAG AA for normal text on white (2.8:1) — it must never be used as a text color on white backgrounds; it is safe only as a button background with white text at large sizes
-- The 13px base font size is smaller than the 16px WCAG guideline recommendation; AWS addresses this through high contrast (19.4:1) to compensate
-- Region and account selectors in the global nav are critical wayfinding elements — they must have adequate focus states since mis-selecting a region in AWS can have significant operational consequences
+### Distinctive Components
+
+**AI Chat Input**
+- Large prompt input area with soft borders
+- Suggestion pills with `#eceae4` borders
+- Voice recording / plan mode toggle buttons as pill shapes (9999px)
+- Warm, inviting input area — not clinical
+
+**Template Gallery**
+- Card grid showing project templates
+- Each card: image + title, `1px solid #eceae4` border, 12px radius
+- Hover: subtle shadow or border darkening
+- Category labels as text links
+
+**Stats Bar**
+- Large metrics: "0M+" pattern in 48px+ weight 600
+- Descriptive text below in muted gray
+- Horizontal layout with generous spacing
+
+## 5. Layout Principles
+
+### Spacing System
+- Base unit: 8px
+- Scale: 8px, 10px, 12px, 16px, 24px, 32px, 40px, 56px, 80px, 96px, 128px, 176px, 192px, 208px
+- The scale expands generously at the top end — sections use 80px–208px vertical spacing for editorial breathing room
+
+### Grid & Container
+- Max content width: approximately 1200px (centered)
+- Hero: centered single-column with massive vertical padding (96px+)
+- Feature sections: 2–3 column grids
+- Full-width footer with multi-column link layout
+- Showcase sections with centered card grids
+
+### Whitespace Philosophy
+- **Editorial generosity**: Lovable's spacing is lavish at section boundaries (80px–208px). The warm cream background makes these expanses feel cozy rather than empty.
+- **Content-driven rhythm**: Tight internal spacing within cards (12–24px) contrasts with wide section gaps, creating a reading rhythm that alternates between focused content and visual rest.
+- **Section separation**: Footer uses `1px solid #eceae4` border and 16px radius container. Sections defined by generous spacing rather than border lines.
+
+### Border Radius Scale
+- Micro (4px): Small buttons, interactive elements
+- Standard (6px): Buttons, inputs, navigation menu
+- Comfortable (8px): Compact cards, divs
+- Card (12px): Standard cards, image containers, templates
+- Container (16px): Large containers, footer sections
+- Full Pill (9999px): Action pills, icon buttons, toggles
+
+## 6. Depth & Elevation
+
+| Level | Treatment | Use |
+|-------|-----------|-----|
+| Flat (Level 0) | No shadow, cream background | Page surface, most content |
+| Bordered (Level 1) | `1px solid #eceae4` | Cards, images, dividers |
+| Inset (Level 2) | `rgba(255,255,255,0.2) 0px 0.5px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px` | Dark buttons, primary actions |
+| Focus (Level 3) | `rgba(0,0,0,0.1) 0px 4px 12px` | Active/focus states |
+| Ring (Accessibility) | `rgba(59,130,246,0.5)` 2px ring | Keyboard focus on inputs |
+
+**Shadow Philosophy**: Lovable's depth system is intentionally shallow. Instead of floating cards with dramatic drop-shadows, the system relies on warm borders (`#eceae4`) against the cream surface to create gentle containment. The only notable shadow pattern is the inset shadow on dark buttons — a subtle multi-layer technique where a white highlight line sits at the top edge while a dark ring and soft drop handle the bottom. This creates a tactile, pressed-into-surface feeling rather than a hovering-above-surface feeling. The warm focus shadow (`rgba(0,0,0,0.1) 0px 4px 12px`) is deliberately diffused and large, creating a soft glow rather than a sharp outline.
+
+### Decorative Depth
+- Hero: soft, warm multi-color gradient wash (pinks, oranges, blues) behind hero — atmospheric, barely visible
+- Footer: gradient background with warm tones transitioning to the bottom
+- No harsh section dividers — spacing and background warmth handle transitions
+
+## 7. Do's and Don'ts
+
+### Do
+- Use the warm cream background (`#f7f4ed`) as the page foundation — it's the brand's signature warmth
+- Use Camera Plain Variable at display sizes with negative letter-spacing (-0.9px to -1.5px)
+- Derive all grays from `#1c1c1c` at varying opacity levels for tonal unity
+- Use the inset shadow technique on dark buttons for tactile depth
+- Use `#eceae4` borders instead of shadows for card containment
+- Keep the weight system narrow: 400 for body/UI, 600 for headings
+- Use full-pill radius (9999px) only for action pills and icon buttons
+- Apply opacity 0.8 on active states for responsive tactile feedback
+
+### Don't
+- Don't use pure white (`#ffffff`) as a page background — the cream is intentional
+- Don't use heavy box-shadows for cards — borders are the containment mechanism
+- Don't introduce saturated accent colors — the palette is intentionally warm-neutral
+- Don't use weight 700 (bold) — 600 is the maximum weight in the system
+- Don't apply 9999px radius on rectangular buttons — pills are for icon/action toggles
+- Don't use sharp focus outlines — the system uses soft shadow-based focus indicators
+- Don't mix border styles — `#eceae4` for passive, `rgba(28,28,28,0.4)` for interactive
+- Don't increase letter-spacing on headings — Camera Plain is designed to run tight at scale
+
+## 8. Responsive Behavior
+
+### Breakpoints
+| Name | Width | Key Changes |
+|------|-------|-------------|
+| Mobile Small | <600px | Tight single column, reduced padding |
+| Mobile | 600–640px | Standard mobile layout |
+| Tablet Small | 640–700px | 2-column grids begin |
+| Tablet | 700–768px | Card grids expand |
+| Desktop Small | 768–1024px | Multi-column layouts |
+| Desktop | 1024–1280px | Full feature layout |
+| Large Desktop | 1280–1536px | Maximum content width, generous margins |
+
+### Touch Targets
+- Buttons: 8px 16px padding (comfortable touch)
+- Navigation: adequate spacing between items
+- Pill buttons: 9999px radius creates large tap-friendly targets
+- Menu toggle: 6px radius button with adequate sizing
+
+### Collapsing Strategy
+- Hero: 60px → 48px → 36px headline scaling with proportional letter-spacing
+- Navigation: horizontal links → hamburger menu at 768px
+- Feature cards: 3-column → 2-column → single column stacked
+- Template gallery: grid → stacked vertical cards
+- Stats bar: horizontal → stacked vertical
+- Footer: multi-column → stacked single column
+- Section spacing: 128px+ → 64px on mobile
+
+### Image Behavior
+- Template screenshots maintain `1px solid #eceae4` border at all sizes
+- 12px border radius preserved across breakpoints
+- Gallery images responsive with consistent aspect ratios
+- Hero gradient softens/simplifies on mobile
+
+## 9. Agent Prompt Guide
+
+### Quick Color Reference
+- Primary CTA: Charcoal (`#1c1c1c`)
+- Background: Cream (`#f7f4ed`)
+- Heading text: Charcoal (`#1c1c1c`)
+- Body text: Muted Gray (`#5f5f5d`)
+- Border: `#eceae4` (passive), `rgba(28,28,28,0.4)` (interactive)
+- Focus: `rgba(0,0,0,0.1) 0px 4px 12px`
+- Button text on dark: `#fcfbf8`
+
+### Example Component Prompts
+- "Create a hero section on cream background (#f7f4ed). Headline at 60px Camera Plain Variable weight 600, line-height 1.10, letter-spacing -1.5px, color #1c1c1c. Subtitle at 18px weight 400, line-height 1.38, color #5f5f5d. Dark CTA button (#1c1c1c bg, #fcfbf8 text, 6px radius, 8px 16px padding, inset shadow) and ghost button (transparent bg, 1px solid rgba(28,28,28,0.4) border, 6px radius)."
+- "Design a card on cream (#f7f4ed) background. Border: 1px solid #eceae4. Radius 12px. No box-shadow. Title at 20px Camera Plain Variable weight 400, line-height 1.25, color #1c1c1c. Body at 14px weight 400, color #5f5f5d."
+- "Build a template gallery: grid of cards with 12px radius, 1px solid #eceae4 border, cream backgrounds. Each card: image with 12px top radius, title below. Hover: subtle border darkening."
+- "Create navigation: sticky on cream (#f7f4ed). Camera Plain 16px weight 400 for links, #1c1c1c text. Dark CTA button right-aligned with inset shadow. Mobile: hamburger menu with 6px radius."
+- "Design a stats section: large numbers at 48px Camera Plain weight 600, letter-spacing -1.2px, #1c1c1c. Labels below at 16px weight 400, #5f5f5d. Horizontal layout with 32px gap."
+
+### Iteration Guide
+1. Always use cream (`#f7f4ed`) as the base — never pure white
+2. Derive grays from `#1c1c1c` at opacity levels rather than using distinct hex values
+3. Use `#eceae4` borders for containment, not shadows
+4. Letter-spacing scales with size: -1.5px at 60px, -1.2px at 48px, -0.9px at 36px, normal at 16px
+5. Two weights: 400 (everything except headings) and 600 (headings)
+6. The inset shadow on dark buttons is the signature detail — don't skip it
+7. Camera Plain Variable at weight 480 is for special display moments only
