@@ -114,9 +114,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Ready'
-  return 'Preparing'
+  if (currentStatus.value === 'error') return t('uiSimView.statusError')
+  if (currentStatus.value === 'completed') return t('uiSimView.statusReady')
+  return t('uiSimView.statusPreparing')
 })
 
 // --- Helpers ---

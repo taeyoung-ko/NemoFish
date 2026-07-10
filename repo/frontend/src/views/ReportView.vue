@@ -114,9 +114,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Completed'
-  return 'Generating'
+  if (currentStatus.value === 'error') return t('uiReportView.statusError')
+  if (currentStatus.value === 'completed') return t('uiReportView.statusCompleted')
+  return t('uiReportView.statusGenerating')
 })
 
 // --- Helpers ---

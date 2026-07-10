@@ -120,9 +120,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Completed'
-  return 'Running'
+  if (currentStatus.value === 'error') return t('uiSimRun.statusError')
+  if (currentStatus.value === 'completed') return t('uiSimRun.statusCompleted')
+  return t('uiSimRun.statusRunning')
 })
 
 const isSimulating = computed(() => currentStatus.value === 'processing')

@@ -114,10 +114,10 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Completed'
-  if (currentStatus.value === 'processing') return 'Processing'
-  return 'Ready'
+  if (currentStatus.value === 'error') return t('uiInteractView.statusError')
+  if (currentStatus.value === 'completed') return t('uiInteractView.statusCompleted')
+  if (currentStatus.value === 'processing') return t('uiInteractView.statusProcessing')
+  return t('uiInteractView.statusReady')
 })
 
 // --- Helpers ---
