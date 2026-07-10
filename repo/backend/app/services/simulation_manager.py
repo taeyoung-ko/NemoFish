@@ -428,6 +428,7 @@ class SimulationManager:
                 from types import SimpleNamespace
                 config_entities = [
                     SimpleNamespace(
+                        uuid=f"nemotron-{p.user_id}",   # config 생성기가 entity.uuid 참조 → 합성 id 부여
                         name=p.name,
                         summary=(p.bio or (p.persona or "")[:200]),
                         get_entity_type=lambda: "Person",
