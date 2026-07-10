@@ -26,8 +26,8 @@
     "files": "个文件"
   },
   "meta": {
-    "title": "MiroFish - 预测万物",
-    "description": "MiroFish - 社交媒体舆论模拟系统"
+    "title": "NemoFish - 预测万物",
+    "description": "NemoFish - 社交媒体舆论模拟系统"
   },
   "nav": {
     "visitGithub": "访问我们的Github主页"
@@ -38,7 +38,7 @@
     "heroTitle1": "上传任意报告",
     "heroTitle2": "即刻推演未来",
     "heroDesc": "即使只有一段文字，{brand} 也能基于其中的现实种子，全自动生成与之对应的至多{agentScale}构成的平行世界。通过上帝视角注入变量，在复杂的群体交互中寻找动态环境下的{optimalSolution}",
-    "heroDescBrand": "MiroFish",
+    "heroDescBrand": "NemoFish",
     "heroDescAgentScale": "百万级Agent",
     "heroDescOptimalSolution": "\"局部最优解\"",
     "slogan": "让未来在 Agent 群中预演，让决策在百战后胜出",
@@ -67,7 +67,7 @@
     "inputParams": "输入参数",
     "simulationPrompt": ">_ 02 / 模拟提示词",
     "promptPlaceholder": "// 用自然语言输入模拟或预测需求（例.武大若发布撤销肖某处分的公告，会引发什么舆情走向）",
-    "engineBadge": "引擎: MiroFish-V1.0",
+    "engineBadge": "引擎: NemoFish-V1.0",
     "startEngine": "启动引擎",
     "initializing": "初始化中...",
     "agentCount": "Agent 数量",
@@ -111,7 +111,7 @@
     "simInstanceDesc": "新建simulation实例，拉取模拟世界参数模版",
     "asyncTaskDone": "异步任务已完成",
     "generateAgentPersona": "生成 Agent 人设",
-    "generateAgentPersonaDesc": "结合上下文，自动调用工具从知识图谱梳理实体与关系，初始化模拟个体，并基于现实种子赋予他们独特的行为与记忆",
+    "generateAgentPersonaDesc": "从 NVIDIA Nemotron-Personas-Korea 数据集（100万条）中（可按人口统计条件筛选后）采样基于真实人口分布的合成韩国画像，构建模拟智能体，并为每个智能体赋予基于人口统计、职业与兴趣的独特行为与记忆",
     "currentAgentCount": "当前Agent数",
     "expectedAgentTotal": "预期Agent总数",
     "relatedTopicsCount": "现实种子当前关联话题数",
@@ -154,7 +154,7 @@
     "setupComplete": "准备完成",
     "setupCompleteDesc": "模拟环境已准备完成，可以开始运行模拟",
     "roundsConfig": "模拟轮数设定",
-    "roundsConfigDesc": "MiroFish 自动规划推演现实 {hours} 小时，每轮代表现实 {minutesPerRound} 分钟时间流逝",
+    "roundsConfigDesc": "NemoFish 自动规划推演现实 {hours} 小时，每轮代表现实 {minutesPerRound} 分钟时间流逝",
     "customToggle": "自定义",
     "roundsUnit": "轮",
     "estimatedDuration": "若Agent规模为100：预计耗时约 {minutes} 分钟",
@@ -285,7 +285,7 @@
     "selectChatTarget": "选择对话对象",
     "sendSurvey": "发送问卷调查到世界中",
     "reportAgentChat": "Report Agent - Chat",
-    "reportAgentDesc": "报告生成智能体的快速对话版本，可调用 4 种专业工具，拥有MiroFish的完整记忆",
+    "reportAgentDesc": "报告生成智能体的快速对话版本，可调用 4 种专业工具，拥有NemoFish的完整记忆",
     "toolInsightForge": "InsightForge 深度归因",
     "toolInsightForgeDesc": "对齐现实世界种子数据与模拟环境状态，结合Global/Local Memory机制，提供跨时空的深度归因分析",
     "toolPanoramaSearch": "PanoramaSearch 全景追踪",
