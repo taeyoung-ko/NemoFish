@@ -2355,8 +2355,6 @@ onUnmounted(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  max-height: 120px;
-  overflow-y: auto;
 }
 .filter-chip {
   display: inline-flex;

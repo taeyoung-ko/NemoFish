@@ -152,6 +152,11 @@ def main():
                 "--port", "8000", "--max-model-len", "32768",
                 "--gpu-memory-utilization", "0.5", "--max-num-seqs", "256",
                 "--reasoning-parser", "qwen3",
+                # ★ tool calling 필수 — 없으면 OASIS 에이전트가 액션(create_post/like/comment)을
+                #   함수호출로 못 내서 400 에러 → 시뮬이 통째로 무행동(refresh만)이 됨.
+                #   Qwen3 표준은 hermes 파서(<tool_call> 포맷). 안 되면 qwen3_xml 로 교체.
+                "--enable-auto-tool-choice",
+                "--tool-call-parser", "hermes",
             ], cwd=HERE, color="\033[33m",
                 env={
                     "VLLM_USE_DEEP_GEMM": "0",
