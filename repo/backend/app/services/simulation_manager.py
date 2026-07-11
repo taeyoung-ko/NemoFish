@@ -264,7 +264,13 @@ class SimulationManager:
         state = self._load_simulation_state(simulation_id)
         if not state:
             raise ValueError(f"模拟不存在: {simulation_id}")
-        
+
+        # 프로젝트에 저장된 모드(local|cloud) → 이 run의 모든 LLM/임베딩/리랭킹에 사용
+        from ..models.project import ProjectManager
+        from ..utils.providers import project_providers
+        _providers = project_providers(ProjectManager.get_project(state.project_id))
+        _llm = _providers["llm"]
+
         try:
             state.status = SimulationStatus.PREPARING
             self._save_simulation_state(state)
@@ -275,7 +281,7 @@ class SimulationManager:
             if progress_callback:
                 progress_callback("reading", 0, t('progress.connectingZepGraph'))
             
-            reader = ZepEntityReader()
+            reader = ZepEntityReader(providers=_providers)
             
             if progress_callback:
                 progress_callback("reading", 30, t('progress.readingNodeData'))
@@ -314,8 +320,11 @@ class SimulationManager:
                     total=total_entities
                 )
             
-            # 传入graph_id以启用Zep检索功能，获取更丰富的上下文
-            generator = OasisProfileGenerator(graph_id=state.graph_id)
+            # 传入graph_id以启用Zep检索功能，获取更丰富的上下文 (LLM/임베딩/리랭킹 = 프로젝트 모드)
+            generator = OasisProfileGenerator(
+                graph_id=state.graph_id,
+                api_key=_llm["api_key"], base_url=_llm["base_url"], model_name=_llm["model"],
+                providers=_providers)
             
             def profile_progress(current, total, msg):
                 if progress_callback:
@@ -412,7 +421,8 @@ class SimulationManager:
                     total=3
                 )
             
-            config_generator = SimulationConfigGenerator()
+            config_generator = SimulationConfigGenerator(
+                api_key=_llm["api_key"], base_url=_llm["base_url"], model_name=_llm["model"])
             
             if progress_callback:
                 progress_callback(

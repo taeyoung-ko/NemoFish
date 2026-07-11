@@ -43,12 +43,13 @@ class GraphBuilderService:
     负责调用Zep API构建知识图谱
     """
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, providers: Optional[Dict[str, Any]] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
             raise ValueError("ZEP_API_KEY 未配置")
-        
-        self.client = Zep(api_key=self.api_key)
+
+        # providers: {llm, embed, rerank} — 그래프 추출 LLM + 임베딩 provider 결정. None이면 로컬.
+        self.client = Zep(api_key=self.api_key, providers=providers)
         self.task_manager = TaskManager()
     
     def build_graph_async(

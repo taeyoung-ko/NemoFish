@@ -208,6 +208,10 @@ const handleNewProject = async () => {
     const formData = new FormData()
     pending.files.forEach(f => formData.append('files', f))
     formData.append('simulation_requirement', pending.simulationRequirement)
+    // designdb에서 선별한 시드 기사 id (있으면)
+    if (pending.designdbIds && pending.designdbIds.length) {
+      formData.append('designdb_ids', pending.designdbIds.join(','))
+    }
 
     const res = await generateOntology(formData)
     if (res.success) {

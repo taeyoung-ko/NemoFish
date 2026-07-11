@@ -7,12 +7,14 @@ import { reactive } from 'vue'
 const state = reactive({
   files: [],
   simulationRequirement: '',
+  designdbIds: [],      // designdb에서 선별한 시드 기사 id 목록
   isPending: false
 })
 
-export function setPendingUpload(files, requirement) {
+export function setPendingUpload(files, requirement, designdbIds = []) {
   state.files = files
   state.simulationRequirement = requirement
+  state.designdbIds = designdbIds
   state.isPending = true
 }
 
@@ -20,6 +22,7 @@ export function getPendingUpload() {
   return {
     files: state.files,
     simulationRequirement: state.simulationRequirement,
+    designdbIds: state.designdbIds,
     isPending: state.isPending
   }
 }
@@ -27,6 +30,7 @@ export function getPendingUpload() {
 export function clearPendingUpload() {
   state.files = []
   state.simulationRequirement = ''
+  state.designdbIds = []
   state.isPending = false
 }
 

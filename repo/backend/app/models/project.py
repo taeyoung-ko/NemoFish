@@ -48,7 +48,22 @@ class Project:
     simulation_requirement: Optional[str] = None
     chunk_size: int = 500
     chunk_overlap: int = 50
-    
+
+    # 실행 모드 + provider 설정 (Home에서 선택 → 파이프라인 전체에 전파)
+    #   mode='local'  : Qwen LLM + Qwen 임베더/리랭커 (완전 로컬)
+    #   mode='cloud'  : OpenAI gpt-5.4-nano + Voyage 임베딩/리랭커 (완전 클라우드)
+    mode: Optional[str] = None            # 'local' | 'cloud'
+    llm_provider: Optional[str] = None    # 'local' | 'openai'
+    llm_base_url: Optional[str] = None
+    llm_model: Optional[str] = None
+    llm_api_key: Optional[str] = None
+    embed_provider: Optional[str] = None  # 'local' | 'voyage'
+    embed_model: Optional[str] = None
+    embed_api_key: Optional[str] = None
+    rerank_provider: Optional[str] = None # 'local' | 'voyage'
+    rerank_model: Optional[str] = None
+    rerank_api_key: Optional[str] = None
+
     # 错误信息
     error: Optional[str] = None
     
@@ -69,6 +84,17 @@ class Project:
             "simulation_requirement": self.simulation_requirement,
             "chunk_size": self.chunk_size,
             "chunk_overlap": self.chunk_overlap,
+            "mode": self.mode,
+            "llm_provider": self.llm_provider,
+            "llm_base_url": self.llm_base_url,
+            "llm_model": self.llm_model,
+            "llm_api_key": self.llm_api_key,
+            "embed_provider": self.embed_provider,
+            "embed_model": self.embed_model,
+            "embed_api_key": self.embed_api_key,
+            "rerank_provider": self.rerank_provider,
+            "rerank_model": self.rerank_model,
+            "rerank_api_key": self.rerank_api_key,
             "error": self.error
         }
     
@@ -94,6 +120,17 @@ class Project:
             simulation_requirement=data.get('simulation_requirement'),
             chunk_size=data.get('chunk_size', 500),
             chunk_overlap=data.get('chunk_overlap', 50),
+            mode=data.get('mode'),
+            llm_provider=data.get('llm_provider'),
+            llm_base_url=data.get('llm_base_url'),
+            llm_model=data.get('llm_model'),
+            llm_api_key=data.get('llm_api_key'),
+            embed_provider=data.get('embed_provider'),
+            embed_model=data.get('embed_model'),
+            embed_api_key=data.get('embed_api_key'),
+            rerank_provider=data.get('rerank_provider'),
+            rerank_model=data.get('rerank_model'),
+            rerank_api_key=data.get('rerank_api_key'),
             error=data.get('error')
         )
 

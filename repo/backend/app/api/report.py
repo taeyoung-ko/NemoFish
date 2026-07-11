@@ -135,11 +135,17 @@ def generate_report():
                     message=t('api.initReportAgent')
                 )
                 
-                # 创建Report Agent
+                # 创建Report Agent (LLM/임베딩/리랭킹 = 프로젝트의 모드)
+                from ..utils.providers import project_providers
+                from ..utils.llm_client import LLMClient
+                _providers = project_providers(project)
+                _llm = _providers["llm"]
                 agent = ReportAgent(
                     graph_id=graph_id,
                     simulation_id=simulation_id,
-                    simulation_requirement=simulation_requirement
+                    simulation_requirement=simulation_requirement,
+                    llm_client=LLMClient(api_key=_llm["api_key"], base_url=_llm["base_url"], model=_llm["model"]),
+                    providers=_providers
                 )
                 
                 # 进度回调

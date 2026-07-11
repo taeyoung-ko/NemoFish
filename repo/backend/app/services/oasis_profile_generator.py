@@ -196,33 +196,36 @@ class OasisProfileGenerator:
     ]
     
     def __init__(
-        self, 
+        self,
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         model_name: Optional[str] = None,
         zep_api_key: Optional[str] = None,
-        graph_id: Optional[str] = None
+        graph_id: Optional[str] = None,
+        providers: Optional[Dict[str, Any]] = None
     ):
         self.api_key = api_key or Config.LLM_API_KEY
         self.base_url = base_url or Config.LLM_BASE_URL
         self.model_name = model_name or Config.LLM_MODEL_NAME
-        
+        self._is_openai = "openai.com" in (self.base_url or "")
+
         if not self.api_key:
             raise ValueError("LLM_API_KEY 未配置")
-        
+
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.base_url
         )
-        
-        # Zep客户端用于检索丰富上下文
+
+        # Zep客户端用于检索丰富上下文 (임베딩/리랭킹 provider = 프로젝트 모드)
         self.zep_api_key = zep_api_key or Config.ZEP_API_KEY
         self.zep_client = None
         self.graph_id = graph_id
-        
+        self._providers = providers
+
         if self.zep_api_key:
             try:
-                self.zep_client = Zep(api_key=self.zep_api_key)
+                self.zep_client = Zep(api_key=self.zep_api_key, providers=providers)
             except Exception as e:
                 logger.warning(f"Zep客户端初始化失败: {e}")
     

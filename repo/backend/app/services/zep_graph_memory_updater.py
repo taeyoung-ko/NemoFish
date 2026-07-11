@@ -229,21 +229,22 @@ class ZepGraphMemoryUpdater:
     MAX_RETRIES = 3
     RETRY_DELAY = 2  # 秒
     
-    def __init__(self, graph_id: str, api_key: Optional[str] = None):
+    def __init__(self, graph_id: str, api_key: Optional[str] = None, providers: Optional[dict] = None):
         """
         初始化更新器
-        
+
         Args:
             graph_id: Zep图谱ID
             api_key: Zep API Key（可选，默认从配置读取）
+            providers: 시뮬 모드의 provider 설정(추출 LLM + 임베딩). None이면 로컬 Qwen.
         """
         self.graph_id = graph_id
         self.api_key = api_key or Config.ZEP_API_KEY
-        
+
         if not self.api_key:
             raise ValueError("ZEP_API_KEY未配置")
-        
-        self.client = Zep(api_key=self.api_key)
+
+        self.client = Zep(api_key=self.api_key, providers=providers)
         
         # 活动队列
         self._activity_queue: Queue = Queue()
@@ -487,14 +488,15 @@ class ZepGraphMemoryManager:
     _lock = threading.Lock()
     
     @classmethod
-    def create_updater(cls, simulation_id: str, graph_id: str) -> ZepGraphMemoryUpdater:
+    def create_updater(cls, simulation_id: str, graph_id: str, providers: dict = None) -> ZepGraphMemoryUpdater:
         """
         为模拟创建图谱记忆更新器
-        
+
         Args:
             simulation_id: 模拟ID
             graph_id: Zep图谱ID
-            
+            providers: 시뮬 모드의 provider 설정(추출 LLM + 임베딩)
+
         Returns:
             ZepGraphMemoryUpdater实例
         """
@@ -502,8 +504,8 @@ class ZepGraphMemoryManager:
             # 如果已存在，先停止旧的
             if simulation_id in cls._updaters:
                 cls._updaters[simulation_id].stop()
-            
-            updater = ZepGraphMemoryUpdater(graph_id)
+
+            updater = ZepGraphMemoryUpdater(graph_id, providers=providers)
             updater.start()
             cls._updaters[simulation_id] = updater
             

@@ -882,29 +882,31 @@ class ReportAgent:
     MAX_TOOL_CALLS_PER_CHAT = 2
     
     def __init__(
-        self, 
+        self,
         graph_id: str,
         simulation_id: str,
         simulation_requirement: str,
         llm_client: Optional[LLMClient] = None,
-        zep_tools: Optional[ZepToolsService] = None
+        zep_tools: Optional[ZepToolsService] = None,
+        providers: Optional[Dict[str, Any]] = None
     ):
         """
         初始化Report Agent
-        
+
         Args:
             graph_id: 图谱ID
             simulation_id: 模拟ID
             simulation_requirement: 模拟需求描述
             llm_client: LLM客户端（可选）
             zep_tools: Zep工具服务（可选）
+            providers: provider 설정(프로젝트 모드) — LLM/임베딩/리랭킹
         """
         self.graph_id = graph_id
         self.simulation_id = simulation_id
         self.simulation_requirement = simulation_requirement
-        
+
         self.llm = llm_client or LLMClient()
-        self.zep_tools = zep_tools or ZepToolsService()
+        self.zep_tools = zep_tools or ZepToolsService(llm_client=self.llm, providers=providers)
         
         # 工具定义
         self.tools = self._define_tools()

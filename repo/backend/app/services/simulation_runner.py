@@ -375,9 +375,14 @@ class SimulationRunner:
                 raise ValueError("启用图谱记忆更新时必须提供 graph_id")
             
             try:
-                ZepGraphMemoryManager.create_updater(simulation_id, graph_id)
+                # 시뮬 중 그래프 메모리 업데이트(추출 LLM + 임베딩) = 프로젝트의 모드/provider
+                from ..models.project import ProjectManager
+                from ..utils.providers import project_providers
+                _mem_providers = project_providers(ProjectManager.get_project(config.get("project_id")))
+                ZepGraphMemoryManager.create_updater(simulation_id, graph_id, providers=_mem_providers)
                 cls._graph_memory_enabled[simulation_id] = True
-                logger.info(f"已启用图谱记忆更新: simulation_id={simulation_id}, graph_id={graph_id}")
+                logger.info(f"已启用图谱记忆更新: simulation_id={simulation_id}, graph_id={graph_id} "
+                            f"(mode={_mem_providers.get('mode')})")
             except Exception as e:
                 logger.error(f"创建图谱记忆更新器失败: {e}")
                 cls._graph_memory_enabled[simulation_id] = False
@@ -432,7 +437,24 @@ class SimulationRunner:
             env = os.environ.copy()
             env['PYTHONUTF8'] = '1'  # Python 3.7+ 支持，让所有 open() 默认使用 UTF-8
             env['PYTHONIOENCODING'] = 'utf-8'  # 确保 stdout/stderr 使用 UTF-8
-            
+
+            # 이 시뮬의 모델 선택(config에 저장된 llm_*)을 서브프로세스 env로 주입.
+            # → run_*_simulation.py 가 이 env(LLM_BASE_URL/MODEL_NAME/API_KEY)로 OASIS 에이전트 LLM을 생성.
+            #   (OASIS 에이전트는 LLM만 씀 — 임베딩/리랭커는 메인 프로세스 담당이라 주입 불필요)
+            try:
+                _cfg_path = os.path.join(sim_dir, "simulation_config.json")
+                if os.path.exists(_cfg_path):
+                    with open(_cfg_path, encoding='utf-8') as _f:
+                        _cfg = json.load(_f)
+                    if _cfg.get("llm_base_url"):
+                        env["LLM_BASE_URL"] = _cfg["llm_base_url"]
+                    if _cfg.get("llm_model"):
+                        env["LLM_MODEL_NAME"] = _cfg["llm_model"]
+                    if _cfg.get("llm_api_key"):
+                        env["LLM_API_KEY"] = _cfg["llm_api_key"]
+            except Exception:
+                pass
+
             # 设置工作目录为模拟目录（数据库等文件会生成在此）
             # 使用 start_new_session=True 创建新的进程组，确保可以通过 os.killpg 终止所有子进程
             process = subprocess.Popen(

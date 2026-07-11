@@ -2383,7 +2383,18 @@ def interview_agents_batch():
         simulation_id = data.get('simulation_id')
         interviews = data.get('interviews')
         platform = data.get('platform')  # 可选：twitter/reddit/None
-        timeout = data.get('timeout', 120)
+        # 타임아웃: 클라이언트가 지정 안 하면 인원수에 비례해 넉넉히 잡는다.
+        # (OpenAI TPM 스로틀 하에서 배치 인터뷰는 인원×플랫폼 수만큼 LLM 호출이 늘어 느림.
+        #  플랫폼 미지정=양쪽(twitter+reddit) 동시라 호출이 2배. 120초 고정은 55명에서 필연 타임아웃.)
+        _raw_timeout = data.get('timeout')
+        if _raw_timeout is None:
+            _n = len(interviews) if isinstance(interviews, list) else 0
+            _per = float(os.environ.get('INTERVIEW_TIMEOUT_PER_AGENT', '12'))
+            _mult = 1 if platform in ('twitter', 'reddit') else 2  # 양 플랫폼이면 2배
+            _cap = int(os.environ.get('INTERVIEW_TIMEOUT_MAX', '1800'))  # 상한 30분
+            timeout = min(max(120, int(_n * _per * _mult)), _cap)
+        else:
+            timeout = _raw_timeout
 
         if not simulation_id:
             return jsonify({

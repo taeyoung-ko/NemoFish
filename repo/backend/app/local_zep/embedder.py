@@ -52,13 +52,24 @@ def embed(
     instruction: Optional[str] = None,
     batch_size: int = 16,
     max_length: int = 1024,
+    provider: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model: Optional[str] = None,
 ) -> np.ndarray:
     """返回 shape=(len(texts), dim) 的 L2 归一化向量。
 
+    provider='voyage' 면 Voyage API, 그 외(기본)는 로컬 Qwen.
     query 侧加检索指令（Qwen3-Embedding 推荐做法），文档侧不加。
     """
     if not texts:
         return np.zeros((0, 1024), dtype=np.float32)
+    # provider 미지정 시 env(GRAPH_EMBED_PROVIDER) 기본 → 클라우드 단일 모드에선 voyage.
+    prov = (provider or os.environ.get("GRAPH_EMBED_PROVIDER") or "local").lower()
+    if prov == "voyage":
+        from . import voyage
+        key = api_key or os.environ.get("VOYAGE_API_KEY")
+        mdl = model or os.environ.get("VOYAGE_EMBED_MODEL", "voyage-4-lite")
+        return voyage.embed(texts, api_key=key, model=mdl, is_query=is_query)
     _load()
     import torch
 
@@ -79,8 +90,11 @@ def embed(
     return np.concatenate(out_vecs, axis=0)
 
 
-def embed_one(text: str, is_query: bool = False, instruction: Optional[str] = None) -> np.ndarray:
-    return embed([text or ""], is_query=is_query, instruction=instruction)[0]
+def embed_one(text: str, is_query: bool = False, instruction: Optional[str] = None,
+              provider: Optional[str] = None, api_key: Optional[str] = None,
+              model: Optional[str] = None) -> np.ndarray:
+    return embed([text or ""], is_query=is_query, instruction=instruction,
+                 provider=provider, api_key=api_key, model=model)[0]
 
 
 def cosine_topk(query_vec: np.ndarray, cand_vecs: np.ndarray, k: int) -> List[int]:

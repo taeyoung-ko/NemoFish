@@ -78,12 +78,13 @@ class ZepEntityReader:
     3. 获取每个实体的相关边和关联节点信息
     """
     
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, providers: Optional[Dict[str, Any]] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
             raise ValueError("ZEP_API_KEY 未配置")
-        
-        self.client = Zep(api_key=self.api_key)
+
+        # providers: 임베딩/리랭킹 provider(프로젝트 모드). 엔티티 읽기엔 대부분 무관하나 검색 대비 전달.
+        self.client = Zep(api_key=self.api_key, providers=providers)
     
     def _call_with_retry(
         self, 

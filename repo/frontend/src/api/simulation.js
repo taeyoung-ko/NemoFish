@@ -188,8 +188,11 @@ export const getEnvStatus = (data) => {
  * 批量采访 Agent
  * @param {Object} data - { simulation_id, interviews: [{ agent_id, prompt }] }
  */
+// 배치 인터뷰(설문)는 인원수만큼 LLM 호출이 나가 오래 걸린다(TPM 스로틀 하 수 분~수십 분).
+// 재시도 금지: 504가 나도 재요청하면 같은 배치를 통째로 다시 큐잉해 부하·비용이 폭증(재시도 폭주).
+// per-call 타임아웃을 백엔드 상한(INTERVIEW_TIMEOUT_MAX=1800초)보다 크게 잡아 axios가 먼저 끊지 않게.
 export const interviewAgents = (data) => {
-  return requestWithRetry(() => service.post('/api/simulation/interview/batch', data), 3, 1000)
+  return service.post('/api/simulation/interview/batch', data, { timeout: 1860000 })
 }
 
 /**

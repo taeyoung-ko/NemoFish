@@ -154,16 +154,16 @@ def generate_ontology():
         simulation_requirement = request.form.get('simulation_requirement', '')
         project_name = request.form.get('project_name', 'Unnamed Project')
         additional_context = request.form.get('additional_context', '')
-        
+
         logger.debug(f"项目名称: {project_name}")
         logger.debug(f"模拟需求: {simulation_requirement[:100]}...")
-        
+
         if not simulation_requirement:
             return jsonify({
                 "success": False,
                 "error": t('api.requireSimulationRequirement')
             }), 400
-        
+
         # 获取上传的文件
         uploaded_files = request.files.getlist('files')
         if not uploaded_files or all(not f.filename for f in uploaded_files):
@@ -172,7 +172,7 @@ def generate_ontology():
                 "error": t('api.requireFileUpload')
             }), 400
         
-        # 创建项目
+        # 创建项目 (LLM/임베딩/리랭킹은 .env의 클라우드 설정 사용)
         project = ProjectManager.create_project(name=project_name)
         project.simulation_requirement = simulation_requirement
         logger.info(f"创建项目: {project.project_id}")
@@ -199,7 +199,23 @@ def generate_ontology():
                 text = TextProcessor.preprocess_text(text)
                 document_texts.append(text)
                 all_text += f"\n\n=== {file_info['original_filename']} ===\n{text}"
-        
+
+        # designdb에서 선별된 시드 기사 추가 (제품 설명으로 검색해 사용자가 고른 것)
+        designdb_ids_raw = request.form.get('designdb_ids', '')
+        designdb_ids = [int(x) for x in designdb_ids_raw.split(',') if x.strip().isdigit()]
+        if designdb_ids:
+            try:
+                from ..services.designdb_search import get_article_texts
+                articles = get_article_texts(designdb_ids)
+                for a in articles:
+                    seed = f"[{a['category_name']}] {a['title']}\n{a['body']}"
+                    document_texts.append(seed)
+                    all_text += f"\n\n=== designdb: {a['title']} ({a['category_name']}) ===\n{a['body']}"
+                project.files.append({"filename": f"designdb 시드 기사 {len(articles)}건", "size": 0})
+                logger.info(f"designdb 시드 기사 {len(articles)}건 추가")
+            except Exception as e:
+                logger.warning(f"designdb 시드 기사 로드 실패(무시하고 진행): {e}")
+
         if not document_texts:
             ProjectManager.delete_project(project.project_id)
             return jsonify({
@@ -212,7 +228,7 @@ def generate_ontology():
         ProjectManager.save_extracted_text(project.project_id, all_text)
         logger.info(f"文本提取完成，共 {len(all_text)} 字符")
         
-        # 生成本体
+        # 生成本体 (LLM = .env의 OpenAI)
         logger.info("调用 LLM 生成本体定义...")
         generator = OntologyGenerator()
         ontology = generator.generate(
@@ -386,8 +402,10 @@ def build_graph():
                     message=t('progress.initGraphService')
                 )
                 
-                # 创建图谱构建服务
-                builder = GraphBuilderService(api_key=Config.ZEP_API_KEY)
+                # 创建图谱构建服务 (LLM 추출·임베딩 = 프로젝트의 모드/provider)
+                from ..utils.providers import project_providers
+                builder = GraphBuilderService(api_key=Config.ZEP_API_KEY,
+                                              providers=project_providers(project))
                 
                 # 分块
                 task_manager.update_task(

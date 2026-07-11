@@ -22,7 +22,19 @@ _lock = threading.Lock()
 _state = {"tok": None, "model": None, "device": None, "true_id": None, "false_id": None}
 
 
-def enabled() -> bool:
+def _resolve(provider, api_key, model):
+    """provider 미지정 시 env(GRAPH_RERANK_PROVIDER) 기본."""
+    prov = (provider or os.environ.get("GRAPH_RERANK_PROVIDER") or "local").lower()
+    key = api_key or os.environ.get("VOYAGE_API_KEY")
+    mdl = model or os.environ.get("VOYAGE_RERANK_MODEL", "rerank-2.5-lite")
+    return prov, key, mdl
+
+
+def enabled(provider: str = None, api_key: str = None) -> bool:
+    """리랭커 사용 가능 여부. voyage면 키가 있으면 True, 로컬이면 모델 설정 여부."""
+    prov, key, _ = _resolve(provider, api_key, None)
+    if prov == "voyage":
+        return bool(key)
     return bool(_DEFAULT_MODEL.strip())
 
 
@@ -77,10 +89,18 @@ def score(query: str, docs: List[str], instruction: str = None,
     return scores
 
 
-def rerank(query: str, docs: List[str], top_k: int = None, instruction: str = None) -> List[Tuple[int, float]]:
-    """返回 [(原索引, 分数)]，按分数降序；top_k 截断。禁用时按原序返回。"""
-    if not enabled() or not docs:
+def rerank(query: str, docs: List[str], top_k: int = None, instruction: str = None,
+           provider: str = None, api_key: str = None, model: str = None) -> List[Tuple[int, float]]:
+    """返回 [(原索引, 分数)]，按分数降序；top_k 截断。禁用时按原序返回。
+
+    provider='voyage' 면 Voyage rerank API, 그 외(기본)는 로컬 Qwen.
+    """
+    prov, key, mdl = _resolve(provider, api_key, model)
+    if not enabled(provider, api_key) or not docs:
         return [(i, 0.0) for i in range(len(docs))][: (top_k or len(docs))]
+    if prov == "voyage":
+        from . import voyage
+        return voyage.rerank(query, docs, api_key=key, model=mdl, top_k=top_k)
     s = score(query, docs, instruction=instruction)
     order = sorted(range(len(docs)), key=lambda i: s[i], reverse=True)
     if top_k:

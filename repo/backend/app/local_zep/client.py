@@ -105,9 +105,12 @@ class _EdgeNS:
 
 
 class _GraphNS:
-    def __init__(self, store: GraphStore):
+    def __init__(self, store: GraphStore, llm=None, embed_cfg=None, rerank_cfg=None):
         self._store = store
-        self._extractor = Extractor()
+        self._extractor = Extractor(llm=llm)   # llm=None이면 Config(로컬 Qwen) 기본
+        # 임베더/리랭커 provider 설정({provider, api_key, model}). None이면 로컬 Qwen.
+        self._embed_cfg = embed_cfg or {}
+        self._rerank_cfg = rerank_cfg or {}
         self.node = _NodeNS(store)
         self.edge = _EdgeNS(store)
         self.episode = _EpisodeNS(store)
@@ -163,7 +166,7 @@ class _GraphNS:
         name_to_uuid: Dict[str, str] = {}
         if entities:
             ent_texts = [f"{e['name']}. {e.get('summary','')}".strip() for e in entities]
-            ent_vecs = _safe_embed(ent_texts)
+            ent_vecs = _safe_embed(ent_texts, self._embed_cfg)
             for e, vec in zip(entities, ent_vecs):
                 node_uuid = self._store.upsert_node(
                     graph_id=graph_id,
@@ -177,7 +180,7 @@ class _GraphNS:
 
         if relations:
             rel_texts = [r.get("fact") or f"{r['source']} {r.get('type','')} {r['target']}" for r in relations]
-            rel_vecs = _safe_embed(rel_texts)
+            rel_vecs = _safe_embed(rel_texts, self._embed_cfg)
             for r, vec in zip(relations, rel_vecs):
                 src = name_to_uuid.get(r["source"].strip().lower())
                 tgt = name_to_uuid.get(r["target"].strip().lower())
@@ -214,7 +217,8 @@ class _GraphNS:
         if not rows:
             return []
         texts = [r["fact"] or r["name"] or "" for r in rows]
-        ranked_idx = _hybrid_rank(query, rows, texts, limit, reranker_flag)
+        ranked_idx = _hybrid_rank(query, rows, texts, limit, reranker_flag,
+                                  self._embed_cfg, self._rerank_cfg)
         return [_edge_obj(rows[i]) for i in ranked_idx]
 
     def _search_nodes(self, graph_id, query, limit, reranker_flag):
@@ -222,22 +226,28 @@ class _GraphNS:
         if not rows:
             return []
         texts = [f"{r['name']}. {r['summary'] or ''}".strip() for r in rows]
-        ranked_idx = _hybrid_rank(query, rows, texts, limit, reranker_flag)
+        ranked_idx = _hybrid_rank(query, rows, texts, limit, reranker_flag,
+                                  self._embed_cfg, self._rerank_cfg)
         return [_node_obj(rows[i]) for i in ranked_idx]
 
 
-def _safe_embed(texts: List[str]) -> List[Optional[np.ndarray]]:
+def _safe_embed(texts: List[str], embed_cfg: dict = None) -> List[Optional[np.ndarray]]:
+    cfg = embed_cfg or {}
     try:
-        vecs = embedder.embed(texts, is_query=False)
+        vecs = embedder.embed(texts, is_query=False,
+                              provider=cfg.get("provider"), api_key=cfg.get("api_key"),
+                              model=cfg.get("model"))
         return [vecs[i] for i in range(len(texts))]
     except Exception as e:
         logger.warning(f"嵌入失败，节点/边将无向量（仅关键词可检索）: {str(e)[:120]}")
         return [None] * len(texts)
 
 
-def _hybrid_rank(query: str, rows, texts: List[str], limit: int, reranker_flag) -> List[int]:
+def _hybrid_rank(query: str, rows, texts: List[str], limit: int, reranker_flag,
+                 embed_cfg: dict = None, rerank_cfg: dict = None) -> List[int]:
     """嵌入初排 -> （可选）重排。嵌入不可用时退化为关键词匹配。"""
-    n = len(rows)
+    ecfg = embed_cfg or {}
+    rcfg = rerank_cfg or {}
     # 收集已有向量
     stored = [GraphStore.row_embedding(r) for r in rows]
     have_vecs = all(v is not None for v in stored)
@@ -245,7 +255,9 @@ def _hybrid_rank(query: str, rows, texts: List[str], limit: int, reranker_flag) 
     prelim: List[int]
     if have_vecs:
         try:
-            qv = embedder.embed_one(query, is_query=True)
+            qv = embedder.embed_one(query, is_query=True,
+                                    provider=ecfg.get("provider"), api_key=ecfg.get("api_key"),
+                                    model=ecfg.get("model"))
             cand = np.vstack(stored).astype(np.float32)
             prelim = embedder.cosine_topk(qv, cand, max(limit * 4, limit))
         except Exception as e:
@@ -255,10 +267,12 @@ def _hybrid_rank(query: str, rows, texts: List[str], limit: int, reranker_flag) 
         prelim = _keyword_rank(query, texts, max(limit * 4, limit))
 
     # 重排（reranker 请求且模型启用时）
-    if reranker_flag and reranker.enabled() and prelim:
+    if reranker_flag and reranker.enabled(rcfg.get("provider"), rcfg.get("api_key")) and prelim:
         try:
             docs = [texts[i] for i in prelim]
-            order = reranker.rerank(query, docs, top_k=limit)
+            order = reranker.rerank(query, docs, top_k=limit,
+                                    provider=rcfg.get("provider"), api_key=rcfg.get("api_key"),
+                                    model=rcfg.get("model"))
             return [prelim[i] for i, _ in order]
         except Exception as e:
             logger.warning(f"重排失败，用初排结果: {str(e)[:100]}")
@@ -278,8 +292,31 @@ def _keyword_rank(query: str, texts: List[str], k: int) -> List[int]:
 
 
 class Zep:
-    """drop-in 替代 zep_cloud.client.Zep。忽略 api_key。"""
+    """drop-in 替代 zep_cloud.client.Zep。忽略 api_key。
 
-    def __init__(self, api_key: str = None, **kwargs):
+    providers(dict, 선택): {llm:{...}, embed:{provider,api_key,model}, rerank:{...}}
+    → LLM 추출/임베딩/리랭킹을 local(Qwen) 또는 cloud(OpenAI+Voyage)로 전환.
+    """
+
+    def __init__(self, api_key: str = None, providers: dict = None,
+                 llm_base_url: str = None, llm_model: str = None, llm_api_key: str = None,
+                 embed_cfg: dict = None, rerank_cfg: dict = None, **kwargs):
         self._store = _get_store()
-        self.graph = _GraphNS(self._store)
+
+        # providers 묶음이 오면 개별 인자로 분해(둘 중 아무 방식이나 허용)
+        if providers:
+            _llm = providers.get("llm") or {}
+            llm_base_url = llm_base_url or _llm.get("base_url")
+            llm_model = llm_model or _llm.get("model")
+            llm_api_key = llm_api_key or _llm.get("api_key")
+            embed_cfg = embed_cfg or providers.get("embed")
+            rerank_cfg = rerank_cfg or providers.get("rerank")
+
+        # 그래프 추출(LLM) 오버라이드. 없으면 Config(로컬 Qwen) 기본.
+        llm = None
+        if llm_base_url or llm_model or llm_api_key:
+            from ..utils.llm_client import LLMClient
+            llm = LLMClient(api_key=llm_api_key, base_url=llm_base_url, model=llm_model)
+
+        self.graph = _GraphNS(self._store, llm=llm,
+                              embed_cfg=embed_cfg, rerank_cfg=rerank_cfg)

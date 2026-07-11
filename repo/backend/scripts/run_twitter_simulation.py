@@ -46,6 +46,15 @@ else:
     if os.path.exists(_backend_env):
         load_dotenv(_backend_env)
 
+# OpenAI 사용 시 TPM(분당 토큰) 스로틀 설치 → 에이전트들의 LLM 호출이 레이트리밋을 안 넘게 분산.
+if "openai.com" in (os.environ.get("LLM_BASE_URL", "") or ""):
+    try:
+        from app.utils.openai_throttle import install as _install_tpm_throttle
+        _install_tpm_throttle()
+        print("[throttle] OpenAI TPM 스로틀 활성화", flush=True)
+    except Exception as _e:
+        print(f"[throttle] 설치 실패(무시): {_e}", flush=True)
+
 
 import re
 
@@ -593,7 +602,7 @@ class TwitterSimulationRunner:
             agent_graph=self.agent_graph,
             platform=oasis.DefaultPlatformType.TWITTER,
             database_path=db_path,
-            semaphore=30,  # 限制最大并发 LLM 请求数，防止 API 过载
+            semaphore=int(os.environ.get("OASIS_LLM_CONCURRENCY", "8")),  # 동시 LLM 요청 수(TPM 보호)
         )
         
         await self.env.reset()

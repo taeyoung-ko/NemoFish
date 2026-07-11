@@ -422,12 +422,14 @@ class ZepToolsService:
     MAX_RETRIES = 3
     RETRY_DELAY = 2.0
     
-    def __init__(self, api_key: Optional[str] = None, llm_client: Optional[LLMClient] = None):
+    def __init__(self, api_key: Optional[str] = None, llm_client: Optional[LLMClient] = None,
+                 providers: Optional[Dict[str, Any]] = None):
         self.api_key = api_key or Config.ZEP_API_KEY
         if not self.api_key:
             raise ValueError("ZEP_API_KEY 未配置")
-        
-        self.client = Zep(api_key=self.api_key)
+
+        # providers: 임베딩/리랭킹 provider(프로젝트 모드). None이면 로컬 Qwen.
+        self.client = Zep(api_key=self.api_key, providers=providers)
         # LLM客户端用于InsightForge生成子问题
         self._llm_client = llm_client
         logger.info(t("console.zepToolsInitialized"))

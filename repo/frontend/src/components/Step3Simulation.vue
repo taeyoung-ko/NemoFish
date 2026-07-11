@@ -715,12 +715,31 @@ watch(() => props.systemLogs?.length, () => {
   })
 })
 
-onMounted(() => {
+onMounted(async () => {
   addLog(t('log.step3Init'))
-  if (props.simulationId) {
-    loadAgentProfiles()   // 이름 클릭 시 카드 표시용 프로필 로드
-    doStartSimulation()
+  if (!props.simulationId) return
+
+  loadAgentProfiles()   // 이름 클릭 시 카드 표시용 프로필 로드
+
+  // 이미 실행 중인 시뮬이면 재시작하지 말고 폴링만 재개(리마운트/새로고침해도 진행 유지).
+  // 실행 중이 아닐 때만 새로 시작한다.
+  try {
+    const res = await getRunStatus(props.simulationId)
+    if (res.success && res.data && res.data.runner_status === 'running') {
+      addLog(t('log.step3Init'))
+      runStatus.value = res.data
+      prevTwitterRound.value = res.data.twitter_current_round || 0
+      prevRedditRound.value = res.data.reddit_current_round || 0
+      phase.value = 1
+      startStatusPolling()
+      startDetailPolling()
+      return
+    }
+  } catch (e) {
+    // run-status 조회 실패 시엔 그냥 새로 시작
   }
+
+  doStartSimulation()
 })
 
 onUnmounted(() => {

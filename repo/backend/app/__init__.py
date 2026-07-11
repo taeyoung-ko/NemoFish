@@ -39,6 +39,18 @@ def create_app(config_class=Config):
         logger.info("MiroFish Backend 启动中...")
         logger.info("=" * 50)
     
+    # OpenAI TPM 스로틀: 메인 프로세스의 모든 OpenAI 호출(온톨로지·설정/프로필 생성 등)을
+    # 시뮬레이션 서브프로세스와 '합산' 예산(크로스-프로세스 파일락)으로 묶어 429를 사전 회피.
+    # Completions.create 를 클래스 레벨에서 몽키패치하므로, 각 서비스가 자체 OpenAI() 클라이언트를
+    # 만들어도 전부 걸린다(llm_client의 raw-response 경로는 자체 reserve로 별도 처리).
+    if "openai.com" in (Config.LLM_BASE_URL or ""):
+        try:
+            from .utils.openai_throttle import install as _install_tpm
+            if _install_tpm():
+                logger.info("[throttle] OpenAI TPM 스로틀 활성화(메인 프로세스)")
+        except Exception as _e:
+            logger.warning(f"[throttle] 설치 실패(무시): {_e}")
+
     # 启用CORS
     CORS(app, resources={r"/api/*": {"origins": "*"}})
     
@@ -63,10 +75,11 @@ def create_app(config_class=Config):
         return response
     
     # 注册蓝图
-    from .api import graph_bp, simulation_bp, report_bp
+    from .api import graph_bp, simulation_bp, report_bp, designdb_bp
     app.register_blueprint(graph_bp, url_prefix='/api/graph')
     app.register_blueprint(simulation_bp, url_prefix='/api/simulation')
     app.register_blueprint(report_bp, url_prefix='/api/report')
+    app.register_blueprint(designdb_bp, url_prefix='/api/designdb')
     
     # 健康检查
     @app.route('/health')
