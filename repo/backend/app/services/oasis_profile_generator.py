@@ -36,13 +36,11 @@ class OasisAgentProfile:
     bio: str
     persona: str
     
-    # 可选字段 - Reddit风格
-    karma: int = 1000
-    
-    # 可选字段 - Twitter风格
-    friend_count: int = 100
-    follower_count: int = 150
-    statuses_count: int = 500
+    # 소셜 지표 — 원본 데이터에 없어 임의값을 만들지 않는다. 중립 0(값 없음).
+    karma: int = 0
+    friend_count: int = 0
+    follower_count: int = 0
+    statuses_count: int = 0
     
     # 额外人设信息
     age: Optional[int] = None
@@ -279,10 +277,11 @@ class OasisProfileGenerator:
             name=name,
             bio=profile_data.get("bio", f"{entity_type}: {name}"),
             persona=profile_data.get("persona", entity.summary or f"A {entity_type} named {name}."),
-            karma=profile_data.get("karma", random.randint(500, 5000)),
-            friend_count=profile_data.get("friend_count", random.randint(50, 500)),
-            follower_count=profile_data.get("follower_count", random.randint(100, 1000)),
-            statuses_count=profile_data.get("statuses_count", random.randint(100, 2000)),
+            # 소셜 지표는 임의로 만들지 않음 → 값 없으면 중립 0
+            karma=profile_data.get("karma", 0),
+            friend_count=profile_data.get("friend_count", 0),
+            follower_count=profile_data.get("follower_count", 0),
+            statuses_count=profile_data.get("statuses_count", 0),
             age=profile_data.get("age"),
             gender=profile_data.get("gender"),
             mbti=profile_data.get("mbti"),
@@ -1093,10 +1092,7 @@ class OasisProfileGenerator:
                 name=name,
                 bio=d.get("bio") or f"{name}",
                 persona=d.get("persona") or d.get("bio") or name,
-                karma=random.randint(500, 5000),
-                friend_count=random.randint(50, 500),
-                follower_count=random.randint(100, 1000),
-                statuses_count=random.randint(100, 2000),
+                # 소셜 지표는 원본 데이터에 없음 → 임의값을 만들지 않고 중립 0으로 둠(기본값 사용)
                 age=d.get("age"),
                 gender=d.get("gender"),
                 mbti=None,   # Nemotron엔 MBTI 없음 → 사용하지 않음(OASIS 쪽에서 mbti 참조 제거)
@@ -1261,7 +1257,7 @@ class OasisProfileGenerator:
                 "name": profile.name,
                 "bio": profile.bio[:150] if profile.bio else f"{profile.name}",
                 "persona": profile.persona or f"{profile.name} is a participant in social discussions.",
-                "karma": profile.karma if profile.karma else 1000,
+                "karma": profile.karma,  # 원본에 없음 → 0(임의값 주입 안 함)
                 "created_at": profile.created_at,
                 # OASIS必需字段 - 确保都有默认值
                 "age": profile.age if profile.age else 30,
