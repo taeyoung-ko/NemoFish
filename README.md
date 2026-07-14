@@ -71,12 +71,12 @@ conda install -c conda-forge "nodejs>=20" -y
 # Patch OASIS (drop MBTI + inject Nemotron demographics into agent prompts)
 python scripts/patch_oasis.py
 
-# (Optional but recommended) Pre-download & preprocess the Nemotron dataset into a
-# local pool, so simulations sample instantly without streaming from HuggingFace.
-python scripts/prepare_nemotron.py            # default 20,000 personas
-# python scripts/prepare_nemotron.py --size 50000
+# (Optional but recommended) Pre-download & preprocess the Nemotron persona pool
+# locally, so simulations sample instantly instead of streaming from HuggingFace.
+python scripts/prepare_nemotron.py                 # default: the FULL dataset (~1M personas, ~4.5GB, tens of minutes)
+# python scripts/prepare_nemotron.py --size 50000  # or a smaller random sample (faster, for testing)
 ```
-> Without the Nemotron pre-download it still works (falls back to streaming from HuggingFace), just slower and requires network.
+> Without this step it still works (falls back to streaming from HuggingFace), just slower and requires network.
 
 ### 3) Frontend deps
 ```bash
